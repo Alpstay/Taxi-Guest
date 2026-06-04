@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prenotazione Transfer · Alpstay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Belleza&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#A68A63; --gold-soft:#C9AC6B; --gold-line:#CBAE68; --gold-wash:#FAF4E9;
+    --ink:#2E2F2E; --ink-soft:#4A4742; --bg:#FFFFFF;
+    --field-bg:#FCFAF5; --field-border:#E6DEC8;
+    --ok:#2E7D58; --err:#A6403A; --info:#3A5A78; --muted:#8A8275;
+    --maxw:1040px; --formw:760px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:'Lato',sans-serif;font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .topbar{height:4px;background:linear-gradient(90deg,#A68A63,#F0DBBC 50%,#A68A63)}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .wrap-narrow{max-width:var(--formw);margin:0 auto}
+
+  header{padding:40px 0 6px;text-align:center}
+  .logo{display:block;margin:0 auto 22px;width:auto;height:96px;max-width:80%;object-fit:contain}
+
+  nav{display:flex;justify-content:center;gap:6px;border-bottom:1px solid var(--field-border);margin-top:10px}
+  .tab{font-family:'Lato',sans-serif;font-weight:400;letter-spacing:.16em;text-transform:uppercase;font-size:12px;color:var(--ink-soft);background:none;border:none;border-bottom:2px solid transparent;padding:16px 22px;cursor:pointer;transition:color .25s,border-color .25s}
+  .tab:hover{color:var(--gold)}
+  .tab.active{color:var(--ink);border-color:var(--gold)}
+
+  .view{display:none;padding:42px 0 30px}
+  .view.active{display:block;animation:rise .45s ease both}
+
+  h1{font-family:'Belleza',sans-serif;font-weight:400;font-size:clamp(34px,6vw,52px);line-height:1.08;letter-spacing:3px;text-transform:uppercase;text-align:center}
+  .lead{font-family:'Lato',sans-serif;font-weight:300;font-size:16px;color:var(--ink-soft);max-width:520px;margin:14px auto 0;text-align:center}
+  .rule{height:2px;width:64px;background:var(--gold);margin:26px auto 0}
+
+  .section{margin-bottom:38px}
+  .section-head{display:flex;align-items:center;gap:16px;margin-bottom:22px}
+  .section-bar{height:2px;flex:1;background:var(--gold-line);opacity:.55}
+  .section-title{font-family:'Belleza',sans-serif;font-size:26px;color:var(--ink);letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:22px 24px}
+  .full{grid-column:1/-1}
+  .field{display:flex;flex-direction:column;position:relative}
+  label{font-family:'Belleza',sans-serif;font-weight:400;font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);margin-bottom:8px}
+  label .req{color:var(--gold);margin-left:3px}
+  input,select,textarea{font-family:'Lato',sans-serif;font-weight:300;font-size:16px;color:var(--ink);background:var(--field-bg);border:1px solid var(--field-border);border-radius:2px;padding:13px 14px;width:100%;transition:border-color .25s,box-shadow .25s,background .25s;appearance:none}
+  textarea{resize:vertical;min-height:92px;line-height:1.55}
+  select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%23B6924E' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");background-repeat:no-repeat;background-position:right 16px center;padding-right:38px;cursor:pointer}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);background:#fff;box-shadow:0 0 0 3px rgba(182,146,78,.12)}
+  input::placeholder,textarea::placeholder{color:#B6AE9C}
+  .field.invalid input,.field.invalid select,.field.invalid textarea{border-color:var(--err);box-shadow:0 0 0 3px rgba(166,64,58,.10)}
+  .err-msg{font-size:12px;color:var(--err);margin-top:6px;display:none}
+  .field.invalid .err-msg{display:block}
+  .hint{font-size:12px;color:#9A917F;margin-top:7px;font-weight:300}
+
+  .submit-row{text-align:center;margin-top:8px}
+  button.submit{font-family:'Lato',sans-serif;font-weight:700;letter-spacing:.2em;text-transform:uppercase;font-size:13px;color:#fff;background:var(--ink);border:1px solid var(--ink);padding:17px 46px;border-radius:2px;cursor:pointer;transition:.3s}
+  button.submit:hover{background:var(--gold);border-color:var(--gold);letter-spacing:.26em}
+  button.submit:disabled{opacity:.55;cursor:wait}
+
+  .success{display:none;text-align:center;padding:50px 28px;background:var(--gold-wash);border:1px solid var(--field-border);border-radius:3px;margin:10px 0 30px}
+  .success.show{display:block;animation:rise .5s ease both}
+  .success .check{width:54px;height:54px;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:var(--gold);font-size:26px}
+  .success h2{font-family:'Belleza',sans-serif;font-size:32px;font-weight:400;margin-bottom:8px}
+  .success .code{font-family:'Lato';font-weight:700;letter-spacing:.12em;color:var(--gold);margin:6px 0 4px}
+  .success p{font-size:15px;color:var(--ink-soft);max-width:460px;margin:0 auto 6px}
+  .ghost-btn{margin-top:22px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:'Lato';font-weight:400;letter-spacing:.14em;text-transform:uppercase;font-size:12px;padding:11px 26px;border-radius:2px;cursor:pointer;transition:.25s}
+  .ghost-btn:hover{background:var(--gold);color:#fff}
+
+  .toolbar{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;margin-bottom:26px}
+  .toolbar .field{min-width:150px;flex:1}
+  .toolbar label{margin-bottom:6px}
+  .btn-line{font-family:'Lato';font-weight:400;letter-spacing:.12em;text-transform:uppercase;font-size:12px;background:none;border:1px solid var(--field-border);color:var(--ink-soft);padding:12px 18px;border-radius:2px;cursor:pointer;transition:.25s;white-space:nowrap}
+  .btn-line:hover{border-color:var(--gold);color:var(--gold)}
+
+  .table-scroll{overflow-x:auto;border:1px solid var(--field-border);border-radius:3px}
+  table{border-collapse:collapse;width:100%;min-width:720px;font-size:14px}
+  thead th{background:var(--gold-wash);color:var(--ink-soft);font-family:'Lato';font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:11px;text-align:left;padding:13px 14px;border-bottom:1px solid var(--field-border)}
+  tbody td{padding:13px 14px;border-bottom:1px solid #F1EBDC;vertical-align:middle}
+  tbody tr{cursor:pointer;transition:background .15s}
+  tbody tr:hover{background:#FCFAF3}
+  tbody tr:last-child td{border-bottom:none}
+  .today-row{box-shadow:inset 3px 0 0 var(--gold)}
+  .pax-name{font-weight:400;color:var(--ink)}
+  .small{font-size:12px;color:var(--muted)}
+  .empty{padding:48px 20px;text-align:center;color:var(--muted)}
+
+  .badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:20px;border:1px solid}
+  .b-inviata{color:var(--gold);border-color:var(--gold);background:var(--gold-wash)}
+  .b-offerta{color:#6b4ea0;border-color:#d8cce8;background:#f3eefb}
+  .b-confermata{color:var(--ok);border-color:#BFE0CD;background:#EFF7F2}
+  .b-rifiutata{color:var(--err);border-color:#E7C7C4;background:#FBF1F0}
+  .b-completata{color:var(--info);border-color:#C7D5E0;background:#EFF3F7}
+  .b-annullata{color:var(--muted);border-color:#DDD7C9;background:#F6F4EE}
+
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:34px}
+  .kpi{border:1px solid var(--field-border);border-radius:3px;padding:22px 20px;background:#fff;position:relative;overflow:hidden}
+  .kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold)}
+  .kpi .k-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .kpi .k-value{font-family:'Belleza',sans-serif;font-size:38px;line-height:1;color:var(--ink)}
+  .kpi .k-sub{font-size:12px;color:var(--ink-soft);margin-top:8px}
+
+  .panel{border:1px solid var(--field-border);border-radius:3px;padding:24px;margin-bottom:28px}
+  .panel h3{font-family:'Belleza';font-weight:400;font-size:22px;color:var(--ink);margin-bottom:18px}
+  .chart-bar{fill:var(--gold);transition:fill .2s}
+  .chart-bar:hover{fill:var(--gold-soft)}
+  .chart-axis{stroke:#E6DEC8;stroke-width:1}
+  .chart-label{font-size:10px;fill:var(--muted);font-family:'Lato'}
+  .chart-val{font-size:10px;fill:var(--ink-soft);font-family:'Lato'}
+
+  .overlay{display:none;position:fixed;inset:0;background:rgba(26,26,26,.5);z-index:50;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto}
+  .overlay.show{display:flex;animation:fade .25s ease}
+  .modal{background:#fff;border-radius:4px;max-width:600px;width:100%;padding:34px;box-shadow:0 24px 60px rgba(0,0,0,.2);animation:rise .3s ease both}
+  .modal-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+  .modal h2{font-family:'Belleza';font-weight:400;font-size:30px}
+  .modal .mcode{font-size:12px;letter-spacing:.1em;color:var(--gold);font-weight:700;margin-bottom:18px}
+  .x{background:none;border:none;font-size:26px;line-height:1;color:var(--muted);cursor:pointer}
+  .x:hover{color:var(--ink)}
+  .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 24px;margin-bottom:22px}
+  .dl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .dv{font-size:15px;color:var(--ink);margin-bottom:8px}
+  .modal-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+
+  .gate{text-align:center;padding:70px 20px;max-width:380px;margin:0 auto}
+  .gate .lock{font-size:30px;color:var(--gold);margin-bottom:14px}
+  .gate h2{font-family:'Belleza';font-weight:400;font-size:30px;margin-bottom:10px}
+  .gate p{color:var(--ink-soft);font-size:14px;margin-bottom:22px}
+  .gate input{text-align:center;letter-spacing:.2em;margin-bottom:14px}
+
+  footer{border-top:1px solid var(--field-border);margin-top:30px;padding:34px 0 56px;text-align:center}
+  .footer-label{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+  .footer-name{font-family:'Belleza';font-size:24px;margin-bottom:14px}
+  .footer-links{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 26px;font-size:14px}
+  .footer-links a{color:var(--ink-soft);text-decoration:none;border-bottom:1px solid transparent;transition:.25s;padding-bottom:2px}
+  .footer-links a:hover{color:var(--gold);border-color:var(--gold)}
+  .footer-note{font-size:12px;color:#A79E8C;margin-top:20px;line-height:1.7}
+  .footer-staff{margin-top:16px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;gap:12px;justify-content:center;align-items:center}
+  .footer-staff a{color:var(--gold);text-decoration:none;border-bottom:1px solid transparent;padding-bottom:2px;transition:.25s}
+  .footer-staff a:hover{border-color:var(--gold)}
+  .footer-staff .sep{color:var(--field-border)}
+  .mode-flag{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:12px}
+
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+
+  @media(max-width:680px){
+    .grid,.detail-grid{grid-template-columns:1fr}
+    .kpis{grid-template-columns:1fr}
+    .section-title{font-size:23px}
+    .logo{height:78px}
+    nav{flex-wrap:wrap}
+  }
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>.langbar{display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap;margin:14px 0 -10px}.langbtn{background:none;border:1px solid var(--field-border);color:var(--muted);border-radius:3px;padding:5px 10px;font-size:12px;font-family:inherit;letter-spacing:.04em;cursor:pointer}.langbtn:hover{border-color:var(--gold-soft);color:var(--ink-soft)}.langbtn.active{border-color:var(--gold);color:var(--gold)}</style>
+</head>
+<body>
+<div class="topbar"></div>
+<div class="wrap">
+  <div class="langbar">
+    <button type="button" class="langbtn" data-lang="it">IT</button>
+    <button type="button" class="langbtn" data-lang="de">DE</button>
+    <button type="button" class="langbtn" data-lang="en">EN</button>
+    <button type="button" class="langbtn" data-lang="zh">中文</button>
+    <button type="button" class="langbtn" data-lang="ko">한국어</button>
+  </div>
+  <header><img class="logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAToAAAD4CAYAAAB8FSpXAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAABi6UlEQVR42u39eZRV5Z0ujj+f993DmWqCmhhFRkUEUQEZFFGDosYhMZOxb3c6WXdlrZueVlZWr9webifpXnfdzr09fW9n+OWu1nRyE69pNcYYFVBEkEFBEAQFGUugmGquM+yz934/vz/22btOFQUynH2Q8n2yTsQjVXt632c/n5mYGRoaGhojGULfAg0NDU10GhoaGproNDQ0NDTRaWhoaGii09DQ0IgThr4FGtWHUxbqt0nfDw1NdBojjOAUwKr8SwZpstPQpqvGFQzPDdSbX+hlsAewX/o4gHIA3wXgsF/M6oRODa3oNK7QBWba5PSe5gP79oCUC1ZFmBJg3wOTgIMErp01F4ahl6KGJjqNK9Za7eP2o23YtX0LnFwfwA4sAUB5UMKAZ9RiwsSrUd/YrO+VhiY6jSsQ7DBMAVIuivl+eIU+mMIHkw/lFcHCRp9SgCqZs6rAEAntr9PQRKdxJRGdApgh2YNJHgwDsCTDJMCHAkuCBxNSSkApgLSbTkMTncYVBwW4DpTrgD0HntMPggsSCuQXwRZg2LVg5QO+B5j2gMXrOGzbOhqroYlO4+NutgKAULAMAUsIAAzJPixiQCooYuQ8F0opQMpBP65JTqOS0OklGvGAbAIE4Ckw+xDwAHZA8CAEg4jgsYKvXEhiwDACBegXtP2qoYlO40paXUmCYUFJguc7MKSCKRU8duEZEp4QgCQwu4AqAgQwaSGnoYlO48qTdiBIAAoCCiAFRQoKgB9yWhSEUCChTVYNTXQaI2rpaU7T0ESnMSIEHZX+cSapndnGXy9HDU10GiMIEckxBR+9FDU00Wlc2aJODlpqIcnpwUwa1YLOo9OoiukavVc5JDwq+7OGhlZ0GnqJaWhoRadxJQg7ghACAgIgAQUJIQwIIYJAhc6f09CvW40rf5mFZquIiO+MJahNWQ1NdBpXspoblvjK/521otPQRKcxIsguILRh1ZyGhiY6jSseJYIj7YvTuAzQwQiNuKXcWRUe6RIwDa3oNEbKEqOhy0xXQmhoRadRFahS37e4ZzSUFT8oEBQNEJyIorCl7/R8Vw1NdBoXA9d12DRtgpdjCAbgA/AAZsBxgESCkSsCmdZ4SMZzodiHkgSWpQJ/BgRTkFPHAqqUWxcbnG6GQSXWLR2nUAQSSQAECAnf9SCttCZaTXQaVyJM0yb4Oe44dRROXw8EFyHhI5Ww4Hke+rJ5WIk6NE9pYMgYFBURBAgQwYdIAIpBkCAQiGS8AQo/x6fb25Dv64GAB0NakFLC8xjSTMJIp9HQ1BKcl4YmOo0rE6wc7u0+jT3vv4sjB/ajkO0CvCIsU8L3ffgwMeGq6ahvmgQr1cCwjcqyDpVFW8M/i0DNiSr46XpOtmPrls04cbQNgl0QEUzDhlICjsdYeNudyNQ1wEyl9WLRRKdxpYKEQtI2IAkgdmEaQSmWJRi+IPQVXJimCSuZRMVJLoQoIzpIEAV9h5nFIBKsOFSB6xoykOSDyIVtEjxPgciFIAHlKzjFfDBuUWhFp4lO4wpFjuEV4bl5KM8B2EXCEjDJgEEKPgt4DNi2BRgxbXTmoB0TC7AgMChwFTIikovPdPWCMYtuHobwkLRtOMqDIRQM04QwJKQkCNPUS2WEQ7/GRvyrTCBhW5BCQflFsHKh3CK8Qh6uk0OhkEM+nwcXCvGpSiKwCNUcASSDT0ntXTqcYRrbFRjkg+DBNAiGBAgeWBXhewWwcmEIEfgPS0Tr6QlkWtFpXIFgAMoHM4MUA76CQQRTEgQJGNJErZFAKp0AJRIxsZwEoWSiCgFBBkgxCBT8OS5FF1KWEDBNCUMArDwYAiBiKK8AHwDDH0TIGlrRaVyhj1iSAdMwYEgJSYGKYQagGJ7roFAoBKkm8ci5yEcXfoQQEMIYTCyXRDJniRYz4BWLgFJQXpBdk7BMJO0EDClBrAKzunRsWTaBrOD5Wt1potO4IkApAhnwXR9u0S+NHaSI/Jip1A+OgZjiECCCUgqGYQFCBgEJQ8JnBSaCYZQIr9Jt1SlBYAnDTIAVgVWQysJMIMUwhQnDsAKiUwrw/UE/njCklnea6DSuHPM1LLcSEcmBB1qax26uKR9KKahSUIKZwQrRn2Nf3j4CciNRIvrgXrAiMOt27p8UaB/diFd1wQYPuvkaEKRAYECUtjyJUmZFTKTDIkoKJikAyIB0lISUVvwdTYgghIQUJqSUYCiQEGAiwC1LbdH+OU10Glcy0QURTyENCCkhBEFwqRqMAIGYW5nbSSIp2TRNKDIhIWCQAQUJJU0UVfyKiqQJaRoQhgkID5IMKMUgBd3GXROdxsgwXT0AKogJCAEIDjY5CCwASTL4HipGriUIYQBUWm5CgKSAlBLE8feoI2JIGVwnswRJAQJDCB1p1USnMQJIrsBQCgoMRQqKFAAVzIyGAiCChNk4qwKcPCul4INLAQeGUgrsC0AyRFjrGoe/jhR89gERqFqmgM4JgKLgM6DoNOFpotO4Qs3WgNhIcJDSYUgAgdlKikEiUHkkYgwKDK11LREKEYFRHUUVHJoBUlDkQ4owf4+1otNEp3HlQwBCQAgRmW6SJIQyAQKkIPgkS22SCGCHK94TTgJSSpjCgJJmEBgBgRUAKRF34DVInxEl05lAGCA3kqRn8mii07jykSAIZsUEEiZMIwmhipASkEJCMcHxBYS0EURd/TjsZwgAhkyA2YfyXJiGAEuGx4REIoGi68EWMSxFIiifIIUNQRYMKWCQFZi0HsOyDBhWIrBnZUJTniY6jSvagi1L7yAWIJYQBDAYJMxI7YDikFeqZCJKEJlgUhBCgtkHWMTrHwQgIEEUpLIIATArEAmw8EtmtEDsslJDE51GNYguLLsqmbGQIFIgIDJp42xTFB4fQgBR9JMhIcFCxOonIyJIKUvXGeTUUInQJUqNBTTRaaLTGDlkF256wQpSEFip+Jtf0gDRkZSRimNmCJRSTGIOCIQ+SikZDBWllfjDVEV4rsOGqWdXaKLTuLJQVmolRNDVV0JCkIIkAimKL72jTC0JEZjNLAaITpIEpIjJZB5MdMEnyCEUpSYDQpXl8CmHITTBaaLTuGKJrtyEMwQgmSGFADHDUMaAn4w5lnSySNFxaLoGB1EQ8GW8piuXEqUNw4AQPiAYUoZEWzKpiRCSnFZzmug0rmCzdcA/B5iEoOaVGRYsGIYRn4+uvDUTAtOVBAXpLZBQoelKKrZrJymC8rdg/BiklFBgwEPs/kkNTXQa1WG5QX3gJBEEGFIE5mrQrijeZcCCAjKhQNWJEtExRMwF/SgV9YuI0Ii5pGCDErBI0cWK8g7IWjFqovvEmJMFZt8HSSP+oc2lTZxMJmHbNkz2YYDgew4Mw0Cx1JMOSgFSxnoqgelswZQCDB9FX8KyrMh0ZuUwVdJPxkHZmWVZyCoFKQmmFaSZCABCqYDklQIkYvHTKZVj33dhmsFWU67DwYyKpCY8TXQjD75XYNfJBeYTFIgVDGnC87Jc9BTS9Y2xLfxyRUdKBW3MQ5Xjx3/t5aYzhVFXBOklKm41FSrZUtRVYKD0qxpF/QKMolOAUAZ85UK5CqZnglU/k7QhE7Wa8DTRjRz09XTixPEjKOSyUJ4L5TtgJlh2Gk7Rx/iJk7ippRVMAqaVorjIRpKEBEdpHoLLAhFxbfZSMMAQAFQQDFClqKsfdjiO7+ADxzdKdb5hHp2keNs0qQIfOrAP3Z2nAPZLlSE+hDAgIWHYKcy8aYneHJroRgocNg1AwAcpF7bBgCi1E2cXnluEJB+GLQG/8puOmQdUHQVkB5aBg768OiHGqKuUEoYE2FdBegckGAQpBvLoKKb0jjBh2DCCZgZBtQbB4LgVnULSttAnAOX7MIhLDY09SDAsqXeGJroRgqLTz5ZJJRXngrgIkwjCYPgKMBI2FBh2wgDgA0JAscOiUr67MqUWRD4RmM8yIDoDRuwO+YjoDIKCDyodTsIISLdECkCBgcrXnDIRhGlASgYRB7dEChigwdceg6o1AEj2QezBkiIIwjCDWEEKpTeIJrqRAcs2AXhI2hZSlgFRlCC4ID+otSzk++B7Cm6xEBAdq1hURugjM4SAQQQfPoSUMEstxmMlupLpKE0FYi/I5iACICEpxsoIGrh2KSWkAZCvAuFqSHhxt3FnBWIfkhA0FAi6ZEEwgRgwhABUgSF0QwFNdFc4/GIRUiq4xRzALgT5kMwQkmAZEqZMwIJEMmmVdoEEAfBVgWUlNkA4TzXc7AKQBBAMUEnRRUQX06YPj20YAkoZgaoCQMKAx6IKHYYHFCXgB0QnJUwRI8mqYBg2EcMwBYQSIPhBG3spIEEQUtfYaqIbIZCmCZAHwzBgWRbYNYPFDoZhWSg6RZhWKhAffhGQpTQExZCVymONoowCJBlChDWnJgTi7yBCRBCyLDmXPBCCcrDAZ4Z4/INlk87CnDklfQgGhCRIlgiiE6HxTJWt/KUgZ8+SBiAUyGcouBHBkkGIs4W9hia66qHU2dFnQDFBGBISNoRywezDlBLSKG0vYSJI6EqSWcEnw74PIRmmKUHsBo54wwSkhCWs0i5XpVKomEx4ywIrB6Yp4fk+TNNE0SdYlgXP8yCJSkGTCgsr34dhGPBKOYJSEhQHLamkRNBd2XcBwSxi6EknSt1ZBAkIMqAkwEJAKQIpFVtFiIYmuuryXElRBCMHBZgMCPJAFDCKISmoa6fy+asVt6MghIBpSRgKkGAwMVAajFMN0zFQjQICXIr0EkTJbI2irnH4Jg0DhmHANE2YhgIxQXGQ0kLCKLVYp8qrydLvM0rHF2BIcPCyEwKeAir6NtPQRPdxQLTZpYSkIOoW7IdgDOHAJq+w36aUWhL4qAxYkJCsoHxAcalNUhWirkEwxICBoK5VSgkJASVkvKZz5B80YJocDNTmwGRkEmcyU6VdF6XUFkkMwUF9sZQSUAAZevtpohthiCoDSoseyi99HxTUV0tVBcqCAPZBkFBCDBAdx3tsSRIGhUQnIErqJt7I50CbKioFZlipiNjinuvKZSkrVDYcSEMT3YhWdVGRfahiwqnx8R002nBKhaMOwwTiwaZj3NcekW1YlSEo/uMrdVYCCu9D3ETHMSVia1yA0NC3IOYNfpZs/6EbnDmce0qxbjil1MDmK9+Il4n4qRSEGKp+Kk30Z1OZ1Rx3SGWdZPSYRU10IxZDCSYQHCoinzhV3VBSZWb4vl81ohtKtB9l5sVpRl5OwtEkp4nuE0FyQ4lluO/i2mDlCuYMgq0i2Q33QRVIrlr3+mwvt8utoDXRaVT9TR6qm0FKJo43PQd1rUoNlJb5pdyyQeQXc9R16OYvJ9rw+LFEX8vaNA1qVxXl7cV03SXyHnq88BNGwsEMxY5mPk10I1PdfRKvd6iiqrayGu6Y1TqH4Y6rlZ0mOk12l2njV9Nk/Tjc+2pd/yf1JfdxgU4vqeLmGm6Rh2kOsW2Asvy4wf4wOut3cZuul5XgSvcbGOIfpCodP7rnmvQ00WlVV7VjVVNdXc7UinJSC4nuciisAUWriU4T3UhXduDLkj8aOcIvE9F97BQdSgGhKii6M3MXNdFVE9pHF/fmUsNH1KrqkD8f/1iM53G2YESVZOQ57/flUHSX69ia6DQuMxlePh/W4M0Wz3IgXKaABItzvlyCf1ZjC5TK0MpaMg1cuyY7TXQjAOUlYMNtdCGMgTIorl7N6dmUT8Xh+9Fxh1M0nqcgDat07RXuBycSBAgwE5hpUCPO8koNCAOATcqvYD6bIEAwfFLwMZTYFQwBGCSqkqitoYnu8iq5QZUBVLVjDa+oRKzHPh9z7WxmfiXM9rMqukGqr5KHV4Pu+8C/+0O+16gGdDDiMpiIg0qeyhd7XJURw5RbRc5wqoKqG3LN5ZHHWIMApbkN0fGp/J90hmkb+/On8rWg61010Y10FYfBRMeIt6B/eHVXveBAlMzBDA+qTGVRVepcL6vrIkypCTyVegNoovsEmaplRMdKAULGvdvO2HznY0rGo+gGK8z4hY0adM1EEsx+6d8/LkEgDU10I9WMDTe6GCj+ri7h0ADpVonghyW6chM7noMDUINN18tCNKJEumKwmtXQRDdSSY6GbH46h5lZuc2OYXx0GLT5QfEHRACGYoYgDIpGxnJkCszksFOKgoKg4NqJKOoeExuxsQCrAXeF4uA8hAi+h9ITwDTRjVQlhzMd87H6qM4ZjKjCRZc54H0wjHLCrU6Bael4PpgJisvrXCXiTjwIUlgQkCzTQPNRRSWi00GJaulpjRih/AKXq6nyZpdCCCilUCwWg15szGCu8FueCOBgkLLv+/B9H1LKUg5f8F3536v8DQj64IXXSEQwTROe54GI4Pslf5kQZ207f/HXzoAEPM+L+vEF6i7w1SmlYJrmwGaIaa5r2M15aBt7IgIrBUG2ZjtNdCNf4VVH0Vy+VkmKBtIEFS5f/thw+XxxK+qz3XPtn9Om64jCcLMawqhreYZ+tTZ6VA3ACgxV1fYC5b64oZu+8mcxOPn4DIIp+c8uH+FqEaeJbgSrt3Kiq4q6GlbJBWktXBriHGtPNqIzSJ6rlk/GAPvDVkQM6iASY5pLdCwFMHHgmxPh89dkp4lupCg6YRPg8XCK7nINalGqrF1RedS1Su2KFAWRV1Tr+kmVEQ6BOTShRdXueXmDVeKw/labr9WC9tFVWdVV3Vc2zGCaiHCqOAWMOSC3QdddXhLFHGut63CtoqLrj+3ag2YCYXeakNy0n04T3See7KqRODzcCL5qX3v8x1Ufed3xnsPgCK4eeaiJ7hNzm0OfzEAftCrcfiIQlfLF+MxjVqNzigjzkYfwEPHlWdrVjDqfs1uLJjtNdCNLxomAbJhKyfClrPlS5DXW2lMFkDCgfAaRCYDgeQoECc/z4u/gQRJKAb6rwJ4CFIEYIGbAB3xflYhWVjiPziZAAtIEQQbJwuEcWcEIRsmG/eiCexDmPFbmmRcYYYVfKX8xNJd934fH6mMzNOiTAB2MqBbXKZQ2GkEpBhEHCWZUBVOmRLBKKZCiqAStKqpCla5NMVhwkEAMKmt6GfONV1TmGyvda6VA0gejpCpL2R4VPxUa7Acc6if0wTGrWg1NdNUmujIHOJXqHokILGhQUIBi6kk3NIdOShFVCnAVAhHRtXNZhQKpIOUizuOHda5KRfeaBEcVEnEjPDaVjl9+L6KqFA1NdCOS7FgFig5VmAhVlscWEA0PuxHL/26c1x6mt0SF7jGzzdD8wcHfVe+ZDxf9VbqoXxPdSCY6YGiaR7mqqTDZBM6owedQVoYV+o6qef2RCQm+LJUh1ZzpOjAPRBObJrpPEMkNp+gioqPqzI1QrKAI8FXQWaNa0cdyFROYktVXdDyoe0kVCVYF9xwouSygo66a6Eay2Vrmows7W8RqxigVlHsN8dH5YHi+girP0I+JaAcdu5zoEJBdnBtencNHVy2eYWYo34dAEIQiooHSOw1NdCOI5YZVdMGmkzFHXM/sRaeUgs9BageTUb3jY7CyqkbUdVjfYKllUzWJLnrJUdAei/X8iKpC59FVA6VcuXLlFvYoAxBv9I0IwjAidTNgLquoP1yxWETJho3hVWpEkV0hBpZb+OfwPADA9wpcYYaBaVml+bFelLdY/hyKxWKsbdylDPIVpZSQUg423bWi04puRJuvQR/tQQ0ZYzNdOchdi8gtUjSIivppSMAiDkUXXWNItlBQHKSXxHrPy0xXVUpWDqO91YgNDFWUYVpJoKh1eokmuhFKcuWtisoJYKBdUDwbf2h32+GUX9ym61Ci4yFNOOPIISzPWRsgugH/aNz3IHrGCF4uYUdlz1eQmug00Y1owivryRZ73WWZWitPSg6m/VHUYjw2ohumxI1Lqqoa6SU8RFEK0KCXTNzmY/kLhgHdvUQT3SdH0Q1NlYvqXeOYNVqaBRGZbxxk6VOpvXmURxcX0ZX8gIPvwcBlxk02NDRhmkSZ6UpVfe5c9qyDMRnaRa6JbgSTXRh1ZWbIuN/s5YXkngdiH4L9QNWQgF+qgY1mrlK8mz1SkDiz27CQ8QyJGVB0VPJNqtJgnqGkXPnjR64J0opOE90nhOQG6ht9MEpKShoDjvo4OvwOUTSKgzy60EvmKxo8XDoGoh3I3/OhfD+4TMFBravg6tbalogOAHy/esNxwmOHPjodjNBEN+LJLphjUEp3MPxS0TfHo6rKfWQsAASbKxpSE3eX4RKJe8qHhA9P+TBBICb45McbdS396lLTFEAhIFeo4DsvRtOVEgTlcjBPttSiif0Bda0Y0tOKrlrQToJqoPQmd10XAgRTSkgQJAjK9UqzPQkgEYOvzA6qzVSQna98H1AEwQJQDFLhBK6YAhJEkFIGnOej1BuO4boumBmO44AEMFxH4IoscCIUHQeCAVIM33VBisA+YJAIevLF6DYIZrd6EPDhFgsQFKQUEQaOzZzXjKcV3UghuyF+qlA9KQaVd/iNYRLeoMhj+D8aUHMUJpRxPJs9nFZPpXI0ooH6z/h78QVjDSmsc1VBCg8rDIx6jJ6Fw5X20wV5fB6UEmAOUlyYCaAzO8loaKIbUaYrQ0VlSIqH1JtW3HQsnDGBjBGaURgceYypF17kg/R9oKz8DUrFXwo1XAlYVI7mV+WZ+74PJRCVgCnFAAXJ2xqa6EYcyYEZynfhwx9oQAnES3TD5bGVjTkc3CIqpuMzwL4XdBdmBRYDVRIKMbeJYr9UheGBWURR38BnNtAIMy5vXUjyvh8SXVCRQdEgDU12muhGGEJHNMGDUC6EEPAhoRDvEOmQSMKoq4IHH4ywUCHuxpsDM1U9EHsIfYZQHHuH4aGpLaGqYiYwhlRHMMdy/FDRMTMEA34wQVzPjNBEN+IoruQjCvw1PvvRQveVD0WItdZ1oKbWg69cEIJWUX7JdK3GXFkV+udYQcjAdIYygyhoNWbKlvrBKeVFU9GCmmPEp+iiZx4ouqj5ph9TKo+GJrqPi/mqlIJkD8weIBA4qauUIT+QsOyBCVDMUEqeQUqVJtpASXpQvgcBD4oI7CsocsHCrpqiC/obhHWuXlWaXyqloDwfLBCY7WF7LlKBqtXQRDfiVF0pnaO8xrMata4kQp+QGqQkQl9VrCVgYbTTLwUfWEERQSm/lNrCVbn3QS6bGGTKV6WVugrNZg8CA/W1Qg+x1kQ3AqVckDTrF6HYQ8IQ8BwPPhFsO4lc0YuvsJ4G+q7l83kkJINRDP6bkPB9guu6gbNOysofX3BUBUJEIBCgGJKC+YKu68IwjNLxK09wgILneaUcRqP0LLwgr5FNeJ4HYVnBX5cJqvRzD/vwGQT4ngtG0PDT9wUKuXy0NuK49Rqa6KpMdAoCKnLAR5FO5UN5Rfg+x1oOFGbmM4KUEkEMVaqsZxax19qSGkgnIeWXShU8QBhVHozjg5UHlIIQwf3w4jxq6f9V2WxZDvhXR1s10Y1U+OHEdkFQnlvSHC48L95gxMBGD7LWFCsQ+2FPznjrPaNopwflFSHYAxTg+y4AA0yJqtSbBgGB0gWTgq+C5pdxD+cJgg8Kfun5Cwj4PkMIAkHXumqiG0mI2nd78H0PqtRSm30fXMqrinPDlU++UmEOHysw+aWARLybnbhUheErsPLhiyDNhsmDL/xYjx/4IcMuzkGKC0OU6k0pvmYKIdGxF7RSZ0D5flDj6zOUCCpFdPBVE90IgcPlb/cgzWNgSAtK0cDYcqpKU6cGE1+gsCBE/HNdS91Cohy2UlCGfQUmBZ/9qqWX+H5Z5xblD6TWxNwPj5nB/kDeoFIKQpuumuhGnqIrLfKw7Cn01yhVna4KpCIfleKSr6x0fN/nsn508ZJNlCCMUoACflW6/AZE58NHiWhLowYHKckY6lxDohtQ1YOXhIROGNZEN1JQZhZF7bxZlsqSEM0y4Bh9ZEPnVQSBAR9MoioDrKNAQFjuRWUExPESXXjMsPklhptTEWOFQnkzBbCCEebRQem9oYluJKm5BIGzzDTgjlFlZotSHpgNcGkyWMVf8ooAPzSfgn5sYlBhe9AGNICIiWyGNBWgsq4l7FclcTaMskYvHlIASnXAIhEP01F5VUZQ6+sjCEiBJDzWZKeJbkSRnQAZEq7vgQWjUHRglMw313Pgl/K94tnhAqQElOvDczwI6YFKdZce+1CQQR6dYVykUz70QQ5j9nGBUcoji+bIsgfXdSCJwTBKvdpC39nF4BzHhwCVrs9TfkDwfhGq5Lf0lRH7yEPf91HI5WElDQgouMoDE8P1PRieB6UYBJ1EFzd0480qma+DKiDCrrPwo9wyARUl91b2VZYkIoIAgUobXCColCCUm40xHJ8CpcRlZWCsvCCHTinA94BykmenwgOsy1JnFIM46O4ctHQvBikuflxMV2AE7Rogy01m5YFLdceKPb03tKIbQVB+sKk5+CfBD3KoFIN9CqoHSh0tKk42yglHNgcEq1yA/FIXEQlcsn/wIxz4gd0K+EH5V5BLEwYlSkNj2L+EV+65ji9AigAfIPZBPkBe0NCAlQ92AV+5Mb3cgk846UtAwffdUhAKYKFKLZd19FUT3YhRdKU0Ej9QNAqBuRa84YO5g6y8WLoLg30oLoJVEewXAeUCwosqBMhHoLBC87HyccfS5vaDJGXlBX8mAOxBiTJVU2mSD0lW+YCnIETwZ/IZpDwoXwV98nyHUekJZFxSyewD7EL5AuQXSx1cCMQyalmlqU4T3QhQcwUGKwilQL4PeB5YukGrJgC+YighA4d8aUIXs8NUkVSHAkP4iIrafQ+KHLDyYbAbBEH88NgxXT8h6j8X5g2SYjD54FIJmB/TmEVw0DFEMEDMID9wExgE+MqH8LlkPqrgOVUyKEElk9xzAc8DBEH5XqmrsYAEQygf0NFXTXQjAqFpovzSRCwPin0Q3FLDTRGQnvJQGmFfwT0fDEsQMuhcwiUlKZQLYh8SonTMYAQj4nCKE0EguG5Z8ksRl9QdvHgbb5YUIisP8FwoCl42TAzh+2VT11QpxeRcgY2LUXQIKmE8F2wQoIoIJtr6JSXva0WniW6kmK0h4aiBUiQqzTgFQ7EJljw4Q79CiauBJRykNIBKSbq+DwKDmKHgldJbYpxXwS5YBV1b4LsQcKFUEUQIqhOED6YY7z2XGo76LpgUoFyQoNJQIAZRMCwneLuoivsOVDQAqNSPLmymAA9K+fEEoDTOgI66VovvuNS+mwm+AnymwC+P4HufqeKbLBzUzMzwlSqJSo5qa8NkYRUSHaHCkc/AfFNhwjD7QQv3Ul1EMBqH4luGVHIFQEEpH65y4ZU6/qpycqeByLNihqrw+EEVdjEhESRpA/A5HFqut6AmupEAzwWkCafoBf3fiABpgCEhDBuGlUTRU5DSjAITAOAWC1yJx+u7XmmDEXxmKGHCg0TBBYoeoFgGnb0DRqxsKVgprYIEo+i5MOwECo4L12f4RGAp4StASBNQDNcNAhOOX4HJzuwwRNDjTsFHwS1AGBKGacJH6RkIWbrd0ThvCBKVaTLgB4GmIE/OgFP0AWHBZwIJC74ieD4AqbegNl1HAkwbYBcgAz4JeD4BiiDJhEEGXE+BicAwAGkAIvCTmdalO8YJgDATIM+Bz4SiT5AMSDIhLQKRCd+VYJKAEoCovKoEldQqSSghIawEIBSKykPB8eCIUlmYYUH6FTx26Vf5xCBpQgkJDwGxEQiCBDwScFUwTNs0LSgEOYaqEveAJCAkSFggMwGlAE8xXF+ASMIlCZMMrTU00Y0QkE3wPXZ8ACIBl8wgGKFcSCAgGSHhegx2PFACFYwJCIB95Aseii7BgwFHBSVYkgk+CfhkgMKor2EF51uxaxeAYcJHQDK5gg/XBQwz2OAuAiIoegpBphlDALClQZU6fl++AJcElGGj4AdpHYo9CAFkiwqWnQoGSoOC4gxRmU4yiggCElnHg08SvhLwfAXHI0gu3XdPRC82DU10Vz6kgYbGFkyZcS1axo6BUC5UKXnUtpNwfYHG1jGgRAqVzOciJAjMnExkMHbc1bAMC5YAhPJBfhEuA3mWGNUyLlCeVOnuHQJgCSuZQeu4ySB4UJ4D0zTBgsFkQRkZJBJpADYZFd3zNgEep2rrMWHSdNTU1MAyZJDLWCpLy3tAY8s4WFYyFJ8AbDIrILKEtAnsc+u4iUGTVT8PAYbrK8AwoWDBSGcC1afHHsavN/SAjipBFdjp74byi5AiaHwJxTCFgbzjI1k/CrDrY1vxXt9pdosFJKxgswsKggFFFiDThp2ug68AKWxyfLBdqR5C7DA8B4WeTiRsCfgKihi+YrCQKBQUapta4yusR5YL3Z2A5yKRsIKKCAaElHBZwCMTyUwTAYCnHDYq2apJOQxVhNfbCcEehJQAAiXtKgmyLNjJNBgCFEOLKA1NdJcHfi5oISKBKIGKAXgMCBMwUhVf7Oy4TLZJ8ByGYRPYYYRzGyJflgCQjGWjeYU8GyilcBgiqMxQCIIehhkM5KF4NzkX+5nMsvYxCHyGIJtYXWJyNjulobADv8MB2A69hH42eOZQgBCBX4KM2K9ZQxPd5RV2foFBHoSgUpSzlF7BAhUvQzrbORTzLKyA2Fy3jw3DAFHysm08N9/PZjJTneN7DnsMGKZNhUKBE4lLVZJhKsrw989z+tmwZBB9hwDMjCY4TXSfNDgMzz+rqskXPE4mKuOYV47PwpZn/V2FYp4T1uUhO1V0WFhnXn/B8zlhSPrYP0MMVnSDX2wOB/46h+EzYCQ00Wmi09DQ0Kg8dBKPhoaGJjoNDQ0NTXQaGhoamug0NDQ0NNFpaGhoaKLT0NDQ0ESnoaGhoYlOQ0NDE52GhoaGJjoNDQ0NTXQaGhoamug0NDQ0NNFpaGhoaKLT0NDQ0ESnoaGhoYluJCLvFHRDQY2P9xrN56u+Rh1n8CB2TXRXOJL2QMdaxy0Oeri5Qp6HEmGukNfEOILRl+3/WDzfbDYbnUcyOXzn6qFkVEnY9uCOz7F1GM7lciylPOOAjuPw0O80Lh79uSxnUumLup+5Qp5TiaR+FpcBhUKBiQhx7IW8U+DyF6BGhRVdoRCoh0KhwKlUirq6unD06FE+F9NqDH77XShCkisUHS4UL+wNGQfJZbNZHu56HMfhXC7HF2LGhOvpQs2UKwGJRIIqvRf6c8F9T9oJ2vbOdh7OrXGha+R8n9Fwz/Vsz/pymLIVU3Q9PT1cV1dH4cVv3LgRf/zHf4w//dM/xWOPPQZmxqVPXLo0HDp0iIkIxWIRhmHA8zykUimMGzeOPg5q89SpU3zq1CnYtg0pJYQQ8H0fSikopSCEgGEYEEKAmeH7PnxWYGYYhoG6ujqMqm+gvFNgpRTSydRlu5YPPviA33jjDWzevBnd3d04deoU+vr6QESora1FQ0MD0uk0pkyZgjlz5uCaa65Bc3MzbNuu2Avx8OHDDABCCAghQERgZoRrnojAhOi78BPeb6UUwp8noujniWjg+bhe9PfCQdThsxJCwPM8TJkyhYZ7IaTT6Yo8n6HK/MChg7x8+XLccccd+P/96MdVXwPHjx/n3t5e1NXVIZfLwfM8GIYBpRRGjRqFhoaGWM6ps7OTlVLo7++H67qYNm1adByjUgcJSS58W61fv557e3uxcuVKLF++HBMmTLisJPf000/z//gf/wPHjx+HZVmora2F4zjIZrP40Y9+xPfcc0/0hs3n83w2v0IcJkwikaDDhw/zj370I/z617+ONlY2m0UqlYLnefB9H+WbVikVfCcIhmHANE3U1NRg9OjRPGbMGMycOROzZs3i6dOno7GxEelkihy3yEopxGXWdHZ28quvvopf/vKXeOeddyCEQC6XAzNHJG2aJjo7O7F//354noeXX34Ztm0jlUqhubkZ8+fPx5w5czB16lSeN2/eRZ9nLpfjV199Fd/73vdgGAYMw4hIqPx+QlB0T8sJLSQuIQKjJ3qx+H5EdkQEScGzYGZIKUFE0b8DwLJly/BXf/VXHL5MQ1SK5MqVeejG+O1vf4tsNovdu3fj3d27eNbM62Jdy/39/ZzJDIxx3Lx5M771rW+BmWHbNvr7+5FIJGAYBm677TZ84xvf4JkzZ9LQn7sYhOKks7OTv/e97+Hll19Ge3s7/viP/xjf+c53UFGi6+vr45qamuiE33vvPf71r38Nz/Owf/9+vPnmm5gwYcJlNRXq6upgWRbq6+ujxeg4DhKJBDKZzKAHVi2SC18KAFBbWwvXddHd3Y1MJoNUKgXTNAcRXDlM04Rt21AINpjrujh58iROnDiBnTt34uWXX4Zpmpg5cyYWLVqEe+65h+fOuaHi1xUutA0bNvDjjz+ON954A7lcDnV1dWhqakJLSwvy+Tz6+vqQy+VQLBbhui5c14XneZBSRp/3338f77//PmzbxqxZs/Dtb3+bFy1aRBf60gCAVCpFXGIbpRRc143+Xsl3DMMw0N3bExEwM8PzAoUmpUQw75bg+z48zws2TOm7UPkJIaJrKVfcIWkahoGhJFfR++8W2TYtCt0YJ06d5KeeegotLS1oa2vD7373O0yePDlWX2xIVuFaWLx4MZYtW4a1a9cikUjAdV0Ui0V0d3dj+/bt2L59O2bOnIlLJbly5b99+3bs3r0bhUIBM2bMwPLlywf9vYoQXUhy4YU+9dRT6OjoQFNTE/r6+vDGG2/glltu4Tgf+Hm84VEoFEIfAYQQsG0b2Wz2jAd2OeA4TqRspJSRcgjN67q6OtTX12PUqFFobGxEY2MjampqUFNXi2QyiY6ODuzYsQN79+7F6dOn4bouhBDYs2cP9uzZg02bNuHhhx/mO++8MzARS5vjUsHMePbZZ/nf//3fsWvXLhiGgfHjx+Ouu+7CH/zBH6C+vh6O46Cvrw+dnZ04cuQI9u/fj3379uHEiRM4duxYZNKm02mk0+lIaYcq7EJfGuE6HDt2LCzLis6z5PyPTOeamhpMnjoFQgg4joNTp07hww8/xMmTJ5HP5+H7PlzXBREhmUyiqakJ48aNQ3NzMzKZDIQQOLj/ALq7u9HR0YFsNotisRg9u5BU43SLDH2Ozz//PDo6OiIXweuvv47f+73fQyqRjH0Nh9fX2NhIjz76KK9fvx7d3d0wDAPpdBq2bePYsWN47bXXcPPNN/P06dMrcj+6u7t5/fr1aG9vBzNj0aJFWLx4MVWc6MKHaNs2HTp0iFetWgXbtiM1smvXLrz//vsYN27cZVN04VvWcZwzTJOhaulywDAMOI4TmUCO48A0TRQKBcybNw9f+tKXMHbsWIwdOxb19fU0nJO5p6cHe/bswX/8x3/gtddeg+u6UEohk8ng/fffx9/+7d/ivffewx/+4R9i4sSJFYnMbdq0CY8//jh27tyJmpoaAMB9992Hb3/724N+d0tLCwBg/vz5kZnb2dmJt956CwcOHMCmTZtw4sSJ6O0/fvx4JBKJi16LAFBfX49kMona2lq0tLRg/PjxmDhxIiZPnoyrr74aTU1NaG1tpTAtp1AoYNu2bfjud7+L/fv3I5lMRr64zs5O/O3f/i0WLlyImpqaiGC6urr45MmTOHToEA4dOoS2tjYcOXIE7e3t6OrqwpgxYyrmc/woHDl2lF999VWk02n09PTANE0cOXIEv/vd7/DVr/xhVdfzggUL8PDDD+OJJ55AY2Mj8vk8pJSwLAtvvvkmdu3ahenTp5/xzC7mhbBz506sW7cOxWIRNTU1eOCBB87cX5VkcgB48cUXceTIkUEO387OTmzevBlz5szhxsZGHXW9ACilMGXKFCxZsuScwZyEZVOiqRktTc1obW3l5uZmPP300xBCIJvNgpmRSqXw4osvwvM8/Mmf/Akmjr80d8L+/fv52Wefxe7du2GaJvr7+zFnzpxhF9pQjBo1ipLJJE+dOpXy+TwfOHAA77zzDjZu3Ihdu3ahpaUF9fX1l7QWW1tb8Rd/8RcYNWoUxo4di+bmZowaNYrOpops00I6neYwGFS+hkMlWE5yANDQ0EANDQ2YMWNG5P44ceIEjhw5gtOnT2P06NFVWys7duzAoUOHcPz4cSSTSTiOA8/zsGXLFixfvpwnjBsf294rdxuE6vrhhx/mV199FadPn47cE8yMvr4+rFmzBgsWLOC6urpB/soLJblcLsc7duxAZ2cnfN/HHXfcgcmTJ8dDdOGFdnd34+mnn0Ymk0EY3SQi9Pb2YtOmTbjrrrvQ2Nio2esC4HkeEonEOUmu3E8DANOnTqNHHnmEc7kcfvWrX0EpFfn7Ojo6sHLlSkyaNAlf+cpXLjoHr7u7m9966y1s3LgRvu+jvr4eXV1dmDt3Lq677vyc36EvNJlM0nXXXYfrrrsOy5Yt4wMHDsAwjIsiunK0trbi/vvvv6Bof6jgwpdM6KMrbcKPNPkzmQxlMhlMmTKlqmkUx0+e4NWrV6O7uxupVAqGYUSuj23btmHr1q2YMG587L7mctx00030wAMP8E9/+tMo8losFuE4Dt544w1s27YNt99++zlV+Ufh4MGDWLduHbq7u9HQ0IAVK1Zg4sSJZ/ysqOSFrlu3DgcOHIhusOu6kdP26NGj2LJly2XJobmSEabBnCunrDxFKKx8uGb6DHrkkUcwefLkMLUH+Xweo0aNgud5ePLJJ3Ho0KGLPq+enh5s2rQJ7e3tqKmpQT6fh2EYuO666y7peseMGUOLFy+mG264AbW1tXSpa/JCU5rCYEQ56YWR2vD780UymaRkMknVyPPbuXMn9uzZg2w2i0QiAc/zkM/nYZomuru78dprr6Grp7tqey+XyzEAPPzww5g2bRo8z4vWaTqdRldXF1544QUAZ+aRni/J9fX18datW/Hee+9BCIH58+efdf1VjOh6e3v5pZdeChdY5EQPUwscx8HatWtx9OhRzV4XuPE+KgcxYQ0sjPLo2rXXXotHHnkkUiVhhFBKiba2Nrz66qsXfV4dHR3YvXt3lFNWKBTgui5qamoqksB7ufIZo7SRsmhw+F3o2/24Xcvpzg7evn072tvbkU6nIYQYpEwBYNu2bXj//ferdh9TqSCHc+LEibj77rtRV1eHfD4fBZyICBs2bMCWLVsGma7nmyQOACdPnozUXHNzM1asWIGGhoZ4iW7dunV499134TgOHnvsMUybNi0ymUIzYNeuXdi+fbtmrwvceJ7nnUEewy2I8qx3xy1y0k7Q/PnzMX78ePT398OyLBARXNeFaZrYsGHDRZ2T4zjc2dmJU6dOoba2Fr7vI5VKwfd9HD9+HLZt04Us2I8TyhOLo1xFoCJBq7iUXXt7OzZu3IiDBw/igQcewNy5c+F5Hurr66MUmNOnT2P9+vVR9USl/XPnWr8rVqzAddddh1wuF6X6hK6tJ5988iNN4LNh79692Lp1K6SUuOaaa3DjjTeeNT+xYkT36quvoru7G62trXjsscdwzz33IJvNDsruz+fzWLt2LY4cOaLN1/NXA5ESG25BlJNbubILfUm1tbWYOnVqtHHDt6mUEocPH76oc/J9Hz09PSgWi1BKRUnBRIStW7de8IIdzuypFFFeDLkMVx0Rkt/HTaU6bpF3796N/fv3o6GhAZ/5zGfwmc98JiSg6Hocx8GmTZuwZ8+eqvjnyv/b5MmTafny5Rg3bhzy+TwKhQIMw0AikcCGDRvw6quvXvCNbW9v59WrV6OjowOtra1YsmTJOX26FSG69evX8759+5DL5bB06VI0NTXRihUr0NraGiVbKqVgWRa2bNmCffv2aQY7T4QR07Pl+CUsm4Z2LSlHFCm07chvE5o23d3dF0QE4d9lZhQKhej32LYdpcO8/fbbaGtr4/7+i++ikUqlqFLlghdKLuVlX2HSsGmaka/u44bjx4/j+eefR19fH5YsWYIxY8Zg6dKlmDZtGorFYvRiKhQKCCPbceFsa6lQKPCSJUtw0003Rco4TJ3KZrN46qmnzttkDX38H374IdauXQvTNDF+/HjMmzcvci0Mdx4VIbo3t7yF/QcPwLBMPPjwQ8EGq6/DHXfdiaLnQhgShmUikUri4OFDWLl6FfpzWQ4d5+djll26DSjP+DAEICj4XGYwBR8FhgKDCUF5l2WCpDhnMfa5IoHMjMbGxigwFFaFuK6LRCIRbYYLIQ2lVJQXl3cKyDsFJNMpWAkbhz9sw7898fhlTb6+VFdBGG0tLxULKx8uN4bulbe3bMXe9/cgYdm4/balyKTSqM3U0H0r7kUhl4dlWTBNE5lMBl1dXVi7di0OHDrI53o5VvqlkkgkaPz48bjvvvvQ0NAAz/OiF28yncJLK1/Gxs2bzusYyWSSCkWHf/HkL3G0/RgSiQQWL16MWbNmUSqVorNFbC/5yW3d9jZv2LABnZ2dWLBgQRT1aGlqpqVLl0ZJn1LKKCK0bt067N27N3KcDz2xy138P5KglEJXV1cU3g/NMiKKfHYXipqaGqqrq0NLSws8z0NdXR06OjpgWRYSiQR++tOf4oc//hHnCnnO5nPaTRETmbS3t/OmTZvQ19eH8ePHY+7cuVElyKc+9anoZRQ2sQCAtrY27Ny5E7lcrurnfc011+DWW2+FaZrIZrOQUkZr8YUXXkBndxefzTwv//dt27Zh27ZtME0T1157LW655ZaPJNtLJrpdu3Zh3759SCQSuO+++9A4ajSFJzxt2jTMnj0bSikUi0Xk83kkEgm0tbXhlVde0au2SqbvqVOnYFlW1E0jLDpvamq6aJXS2NiIa6+9FgDQ19eHpqYmuK6LdDoNZsaPf/xj/OxnP7voSKXGR5twe/fuxYYNG+C6Lm688UZMnz49csZPnz6dlixZgv7+/sjXGFZKrF27FoVCAXGounNh+vTpFBKw4zgR+UopsXr1amzbtu28LJaXX34ZbW1tqK2txYIFCzBr1qxhLcFy9Xveq3w4u/fQoUO8YcMGdHd3Y/r06VF5T9hqp7m5GXfeeSdSqVTkows3w6pVq3Dk2FH9to8ZPT09OHXqFEzTjN7syWQSvu9j+vTpUS3mhWL06NFYuHAhGhoaYBgGstks8vk8uru7YVkWfN/HD3/4Q/zTP/0Tdry7M3rOusNxxYgOb731Fk6ePInm5mbceuutZ6RpPPjggzAMA5ZlQSmFRCIBx3GwZcsWHD58+ILcFpXCddddh4ULFyKdTg9yF/T09GDVqlU4efrUOdfHng/28muvvQYAmDBhAhYvXox0Ok35fD6qzAhz+MrV3XkTXXktWvjdW2+9he3bt0MIgWXLlkVSOeyDVpPO0Jw5czBp0qQoylIsFiGEwIEDB7BmzRq9YuPw45Te1Nl8jg8ePIj29vbIjA1NG8MwsHDhwouOBNbW1tKCBQuwZMmSyARJp9ODkm37+/vx5JNP4ic/+QlefPklPn7yxKAuGtVWFCMJx44dw5o1a8DMmD17Nm644YZB/911Xdx000248cYb4ft+lAdoWRba29uxcuXKMyL51cDo0aNx3333YdKkScjn81EkO5lMYt26dYPSz4bzS//mN79BW1sbiAjz58+Prru849BwVsoF2y3hxjh27Bhv374dnZ2daGlpwe233x7lzJWf6MSJE3HzzTeHqhDJZDKK2D399NMR+2pU6E1f1lXWcRysWrUq8p/Zto18Po/e3l5MmTIFt9566yUda8qUKfTZz34WU6ZMQSqVQj6fRyaTiXx2YfLqqlWr8N//+3/H448/jvf2vM9nM0k0zh9bt27F7t27kU6nMW/evDNKK2tqasi2bSxfvjzKBww75BARVq9ejdOnT1f9vFOpFIUEHOYsmqYJIsLx48fx+uuvRxUcIQmGhHfseDu/+OKLEEKgoaEBd95557DzKIbz8V+0j2737t3YtWsXfN/H9ddfj0mTJp1hBiUsm5pGN9Itt9wSRf4SiQSklDBNE++88w5WrVqlV20F4bpuRCBr1qzB+vXrB2X4+76P8ePH4wtf+AJam1sumWhuuukmfP3rX8fEiROjtkYdHR1RWVhPTw+AIKn1ySefxPe//3089R+/4rYjH+oX3EVi3759vHr16tDvhfnz5w+rzEPVM2XKlCjnMUybaW9vx5o1ay6L0EilUnTHHXfg2muvBTNHLi0pJbZs2RIlsofddUIr4fnnn8eHH34I27Zx5513Yvbs2ed9zAsiujCHpauri7dv3469e/eiqakJixYtQktTMyUsm4brUz9jxgxMmzYNqVQKxWIRtm2jWCxCSonnnnvukmYmaAwxKTNBb8Cdu97lxx9/HN3d3aivr0c+n0c+n0dNTQ1uu+02fPGLX6zIqMSadIbuvWcF/dmf/Rnmz58P0zQjF4VlWairq4vMCd/3sX79enzve9/D97//fbz2+lr93C9w7wHAe++9h82bN6O+vh6zZ8/G9ddff4Zbqb+/n23bpgkTJmD+/Plg5qi5aBgIeOGFF6KGotXGLbfcgnnz5kXms+/7sCwLbW1tZ7i0iAjHjrfz008/HaX/rFixAvW1dRQL0SWTSSoUCnzy5EmsWrUKnudhwoQJmDdvXiQxh+txNn78eCxevDiadRBenJQSb7zxxqAkxjjfMOU1i+Hn45AbNdw5htI9zOM6V/TyjPD7O9v57//+7/Hmm29GnWQKhQJqamrw+c9/Hv/5P/9npBLJis0LyeZzfNcdd9L/+l//C1/84hfDjQkA6O3tjaK9hUIB6XQaruvixRdfxH/9r/8V3/ned/l0ZweXmygfB9/dcPWtcU3MO6+NWlqn2WyWn332WTiOg1GjRmHx4sXDBgrDPMYwG2LUqFFBpNVxIjfGO++8M6jeuXzvxd2IwPM8fPWrX0VLS0tUKeF5HjzPw7vvvou1614fGJdoJ2jlypXYtWtX1Fhz2dLb6UJSl8TFLICNGzfixIkTkFJi3rx5aG5ujkzVYf16pkXXXnstpk2bNihxNWzbUm6+hsXAGoheBmfbZCExhKZqfy7L//z//Qv//u//PrZs2YJRo0bBcRx0dHSgpaUF/+k//Sc89thjGDt2LBy3WLH22ulkivJOgevr6/FXf/GX9K//+q+49dZb0dvbG3WysSwLhmGgv78fnueBiHDq1Ck8/vjj+NKXvoTnnv8Nh+snvB4doS3bQ2Utw99++23U1tZi8uTJmDRp0jkDSrZp0bhx47BgwQIkEgmYphm1srdtG88991yUllG+9+JuRJBOp6m2thZf+9rXkMvlkEwmI144cuQINm/ejCPHjnI2n+O+bD//7ne/i8YgPProo9G6O9/jXXA/uu7uboQ1ZlOnTsWCBQuizrLnwvTp0zF37lzs2LEjuqAwGrRq1Sp89rOf5VmzZmmSO/PNjPb2dmzZsgW2bXNYlF8sFpFIJHD06FHu7+/Hrl278Prrr0dNF5VSKBQKSKVSePTRR/HII49gzvWzo/tbCbM1RE9fL9fVBC2VsvkcL1t6O82aNYuff/55/OxnP8OHH34IpRRqa2ujWscwWdkwDBw+fBjf+ta3sGvXLv6DP/gDjBo1CgnLJj1z9kw899xzOHHiBK6++mrceuutmDRp0keSU1NTE2699Va89dZbgwrrpZRYs2YNdu7cGVll1UQ6naZHHnmEf/7zn+PgwYNRXXc2mw0bc2LprbfRytWreM+ePeju7sanP/1pLFmy5IKPdcFEFw6hICLcdNNNmD59elRvea4oWuOo0TR37lx+8cUX0dnZCdM0kc/noz7yL7/8cpT4F0pnPQM28F0899xzeOWVV5DNZqOE3Gw2C8uy4Hke+vr6kEwmYZomRo0ahUwmg4aGBtx111247bbbMGbMmCA4UDbYuFKTwApFJyK5csJrGt1If/gHX8GyZcv4pz/9KZ5//vkox662thbhWLpEIhEVzP/gBz/Ae++9h//yX/4LZs2addFNQUcq9u7dyy+99BIaGhqiPMbzQcKyaebMmdza2oo9e/ZEyePhgKhf/epXuO666/hyWFOZVJp+//d/n//qr/4qEkA1NTXYu3cvduzYgVmzZvHTTz8dVfR85Stfuaho/QURXU9PD69atQpdXV1obGzELbfcgjEtrYPMjXNh1qxZuO6667Bu3bpB/g8pJV555RU8/PDDPHnyZKqGdL5SIITA1VdfjRkzZkTNLUNzMJlMQgiB+vp6ZDIZTJw4EfX19Zg4cSJumD2Hhs77jAMJy6ZC0eGEZVNIcuVK7+qrJtHf/PV/w0MPPcRPPPEE1q5di2KxGE0x6+rqQmtra9S38PXXX0dvby/+6I/+CAsWLOCadCbq0hKath/1Uh2JcByHf/3rX+P48eMYM2YMbr755guarHfVVVfhxhtvxL59+6LIq+/7qKurw0svvYTPfOYzg0qpqokHH3wQq1evxmuvvQbTNFFbWwvP8/Dqq69CCIHt27ejp6cHn/rUpy4o0nrRRLdr1y5s2LABQgjMmDFjkAI7H0yedDXddNNNvHXr1mjKUzj78fDhw9i4ceOw/d4/yejp6cHv/d7v4Zvf/CYSln1W8god+Mwc+UpTieQgpV1OFpUmu+G+D4nPcYt8w+w59Hd/93f85ptv4v/+3/8btWCfOHEiuru7o+HRDQ0N2LVrF7773e/ir//6r7FkyZIzzvmTmH93+PBhPP/882hoaICUEitWrLigmvBR9Q20aNEiDpvfhq4DKSQ6Ojrw4osvXjaiq83U0Fe+8pUoLzeXy6G2thbvvPMOjh49ikKhgEQigS996UsXbYmcdzCiUCjwCy+8gPb2dowaNQoLFy68qKleCxYswJQpU+C6LgzDiJztSimsX78e+/fv1w7oMliWFVUzFIoOl0eJ+3NZzjsFDsnMNi0KSaGnr5eHkkL4387VCSUOhOeQTqZowYIF+OY3v4mvfe1rGDNmDHp7e6NaaADRyMCenh78y7/8C95+++1zkuknBa+++iqOHj2KdDqNBQsWXJSymTlzJmbPnh2l+oTmayaTweuvv44dO3Zclr3nuEVesGAB7r77bqTT6SjlxfM8HDt2DMViEbfddhtuuukmlK/fC4nOnzfRnTx5EmvWrIFSCo2NjZgzZw7Kh1afL6655hrMmDEjSmI1DCO66Xv27MHu3bs1u5WhWCwGA3Ism8JPuX8jaSdoOIVTV1NLZ4taVpo0PmrBlQc+UokkXTvjGvrqV7+KP/uzP4sUfDhQGggCMNlsFocOHcIrr7yCY8fbP9Evv9OnT/OaNWtgWRZyuRzuvvvui+rwM3r0aFx33XXIZDIwTTOqZAotqjfeeOOyXJ9tWpS0E/TpT38adXV1Ua/Euro6jBo1Cv39/Vi0aBGaG5uofP1eiLI/b6L79a9/jdOnTyOVSmHu3LmYN2/eRfWNSydTdO89K9BQVw+v6MJxizBtC9I0cOx4O9auex192f4Y+tGpYT/EAH0MtlFoug39Lhy0fTEqrFpRy49acMOZG7WZGnr4wYfob/7mbzB37tyoHChUdbZto7+/Hy+++GIsXXEv5LlES6hKnViG5rC99tpr+OCDD1AoFHDNNddg8eLFF/V7M6k0zbvpZlw1YSIsw0Sx4MBnBSYgXZPBq6+twf6DBy7bbrjqqquiziaZTCYasFVTU4Nx48ZdUn7lefnoDh06xM8880xUFHzkyBH87Gc/CyOnfK5FUD4sWkqJfD6P/v5+ZDIZ9Pb2wrDMKNQtpcQHH3yAd955B0sWLYbGyMf8m+fRn/7pn/Lf/M3fYOfOnRgzZkw0eDuRSOD06dPYtWsXbrnlFq5UpPjjjvJAXBgA7O3txejRo6MacSklh/mI59zgxsAW930f/f39yOfz8H0fzAzDHEjUPXHiBN58802MHTv2Y3evieiSfLPnRXSvvfYaDh8+jIaGBriui3feeQdvv/32Rw4MKR8A7Pt+ZKqWhr0EheBOISo6TiQS2L9/PzZs2ICbbrrpE7OwP+lYvHARfepTn+L33nsPnuehWCyiWCwinU4jl8th27ZtKBaLSNqJT8w96enp4bq6Otq0aVPkzunq6kI+n8ehQ4eiEYxDG2kMRTabjdJ5lFJIJpPo6uqKciwBRP+to6MDa9euxe23345kS+vH4j5UqhrlI03XEydO8EsvvQTLsnDs2LFB6iwksPJP+HYo/7iuC8dxUCgUwMzR3IKOjo6oo0J4s/P5PLZt24YDBw5oBvgEIPQjPvTQQ5g5c2a0RsL8ulQqhSNHjpy3P3CkwLIs9Pb28ssvv4xcLhcNMk8mk4NmfziOc85POJ0tn8+jr68PHR0dSCQSkWkYFvqbpgnP86JmHR8XlIulS8FHKro33ngD7733HhKJBMaOHYtvfetbmDhxYtT7feh0pKEMHM78DJtvhsXeRIRf/OIX+Id/+sdIKYalQqGqmzx5slZ1IxypRJJyhTw3NjZi6tSpePfdd1FXVwfLslAoFKKGoWEHi09KakkymaR33nmHDxw4gN7eXjQ2NuIv/uIvcO2110alkw0NDVFN8bmIQikF27ZhWVbU3GHNmjX48Y9/jLwTVKmEuZmnTp3CmjVrcM011/D4seNGzL02Pko+//a3v0WhUEB/fz/uuusu3HvvvRW7+DvuuIP/7YnH0d/fDyll1H24u7sbmzdvxr333otxY8ZqNvgEkN2JEyc4nEMaligBiIYefxwncMUJx3F48+bNOH78ODo6OjB79mzcc889w/Zfu6h7nkrxunXrsPmtNyGljFI6lFJ4++23cfDgQYwfO+6y34dLHR5+Xqbr5s2bcfjwYdi2jdGjR+NTn/pURU4+jNbefPPNdO+998JxnEgZhvWvu3fvxtatW2MZuKvxsVQwkakV+p2SySSKxSLGjx8/yKn+ScDu3bvx5ptvorOzE2PHjsXDDz8cdQ+qBIk2NzfjpptugmEY0d4Lu/kcPXoUb7/9Nnr7+0bM3jsr0WWzWd6yZQtOnjyJkydPYsaMGVi6dGlFDhrmAOXzef7c5z4XjWQLBzVLKfHhhx9Ggz+qneCqUV309vdxKpXC/v37I3dI2BFXSonx48dHSdOfJKLbt28fXNfFlClTcMcdd8BxHL7YCXnlBFksFpFKpejOO+9EOp2OOstIKcHM6OnpwbZt29DW1vaxUXSXGpQQw7E9AOzduxfr1q2D53mora3F/fffXzHZXO6HuP7663HjjTdG4/gMw4h6Zq1fvz6YMFZKELyUjhvhBnJdN8oID9s4hz3fLlWhftR353wQpfrD8l505XNYR+o0rULR4dpMDR08eBAffPBBNMgl7Dxr23bUy7AabZvK73uY8sTM0VyMOEzUoetl7969vH79emSzWRARFi1ahLFjx9Kl1H+XE2SY6H/jjTfS4sWL0dPTE7VwCqeF7dq1C++++25V1wL7CgIEyzBhCAkBAvsK7KtLznU9g+hs26Z8Ps+bNm3C0aNH4TgOrr76aixdujSWZnyZVJruvfde9PX1RRs+TJI9efIk1q5di2w+x9l87pICEyGRlJeceZ6HXC530SRSKBS4UCgM+5ZNJBJ0IfcrdAaHmzz8lP97SAyX23dUKBS4vOPtJan70kts48aNSCaTkblqWRa6u7uxcOFCjBkzBrZpVaVtU7kLJWyHFeb1xfGyCckrXEOO43B7ezt27NgRma0XWlN+Ifjyl78cqOreXuRyOSQSCdi2jdOnT2Pbtm34YP++qq238gat5fc83BuXYrYPa7oeOnQImzdvjhzDy5YtG9T3qqIbxy3ysmXLMG3atEF+Atu2wcx48cUX0d7efkFN9oZD2GwwdLqGU8nCpgIX+5YMF2hPTw+Xv6HLF/H5Ks7wwYb5huFHShkRwuWu+bRtmxKJBHV2dqK//+IqWIYS5YZNG/mXv/wljh8/jt7eXvi+D9u20dLSgnvvvRdjxoypqqkU3v+ww0po2sXdjTqfz/Pp06exbt06nDhxArW1tZg9e3Y0XCoO3HjjjZgzZ06kVnO5XNRsY/PmzTh06FB1fWlCRGteShmlviQSiUsabD/sk9u0aRPef/99OI6D1tbWKAgRR+sk27SosbERn/3sZ6O3KBFFDQLfffddvPzyy8FDuATTxbKsyDQsf2NnMhl0d3df0O/q6urivXv38ptvvslPP/00/+AHP+Bf/OIXOHXqVNRD70LfPmHxfthuPsxLdF03GDJTKtK/7KZmocCnTp3ip59+Gt/97nexfv16bm8/v1rU8CWQSCQodIO8v3cPP/HEE9izZw/GjBmDxsbGqMfesmXLsGDBAgxt/xSbWnWLHL4Qw0+YGxoquziRTCYpnJkQFtsvXLgQLS0tsV1/wrLpscceQzKZRH19PXzfjxT1gQMHsHr1arSfOF6VtRc2Yg0DT47jIJ/Pw3GcS773Z4SyTp48yTt27ECxWAQzY8GCBZg6dSr6+vr4Yor4z9dsu/XWW/HLX/4Sp0+fRk1NTdRH3jRNvPLKK/jCF77AjaNG04W2Ggo7eyilouljoUT2PA+uU8SvfvUr7Nq1i6+66ipcffXVGD9+PEaPHk25XI67urrQ2dmJY8eOob29HSdPnsSJEyfQ3t6Orq4u5HI5tLe349prr8Xy5cvR1NR0hk/kfM6vPOE6jDwbhoF0Oo1EIvGxiTqGJnnYNmjz5s2YO3culi5dytdffz3GjBkTDVIeataXvygPHTrE77//Pv7pX/4ZH3zwARobG+E4Dk6fPo2GhgYsXboUX/va1zBp4lVVU7C2aVEymeRUKhUlLJenNnxUFcKlugR838emTZvQ3t4OZsa4ceOq0vl34cKFGD16NLq6ulBTUwPP8yClhGVZ2LVrF44ePYoxVaiUCPek7/uRgk4kEpHSqxjR5fN5fvvtt/HWW2+ht7c3GitmmuYZsxzy+TxXKjiRSaWptbWV582bh2effTaKvAJBwvFbb72FlStX4tEvfmlQYOJ8fHZhgmm5by6UxpZlgRjYsGEDNm7ciHQ6jdraWjQ3N6O5uZld10VnZyd6enpw+vRp9Pf3R5nkoTIMFdjYsWORyWQGKZ/zIbvw/MIwf/nQHiJCNpuNAjUfB+TzeQ7Ls5RSOHHiBJ577jmsXr0a06ZNwzXXXIOpU6fyjBkzcPXVVyOVSnEqlQIzo7OzEx9++CHef/99bNq0Ce+88w46ujqRyWSglEJ3dzcmTpyIBx98EJ/97GcxbcrUqpvpoT/IcZyoq45hGLHn8dm2TQcPHuSVK1dCCIFUKoW7774bV111VezXPH7sOHrkkUf4f//v/41UKhWtRcuysHfvXmzcuBEzZszgmnSG4mx6GpJa+KK3bTtKPbvU+z9o95w+fRqbN2/GiRMn4Ps+ZsyYgTlz5pwxrzWU2ZW8yEwmg0WLFmH9+vU4fvx45KNzHAdKKTz77LO4//77ORzndxFvTORyuajfWViF4bteFIXt7+/H8ePHsWvXrujmlk+eD1vbhJshLG1LpVIYN27cIF/fhfoTstksHMeJfm8YJAnLd7LZLOz6y59ikUwmKZlM4stf/jLPmDEDr732Gg4ePIi2tjZs2bIFW7duhZQSdXV1GD16NEzTjNq853I5dHZ2oq+vL/KVhqWARIS7774bn/3sZ7Fw4cILGmVXSdO1UChE6yMkvqFJzHEgm83yqlWrsGfPHiilMGbMGEydOrXi++yMF1dJMNx111148skncfz48Ug9eZ6HbDaLl19+GUuXLsXsWdcPqkypNOmFAZHyao/QX1gsFi9pvMJQRQciwoIFCyCEwMMPP4zRo0fDtm3KZrMcmiQXqlrOB6lEkubMmcP33HMPDh8+HAUQwq6zhw4dQmdnJ2ozNXDc4gVHYCdMmIAbbrghmjgUzpWVFLyxs9lsRLihbyyRSMD3/UGEN/TtH5Yo3XDDDaivr7/oe9HY2IgZM2ZEZkRY8+l5HmbPno1R9Q0fm/wSx3F4xowZNGPGDHz5y19GW1sbb926FRs2bMDOnTtx/PhxZLNZdHd3R76u0A8Z+h8ty0JNTQ3qRzXgM5/5DJYvXx4lsF6ugIttWtTa2srXXnstmpubESpR13Wjlu9xbXIA6OzsxPLly5HNZjF//nwsWrTojPteaT950k5Qoejw9dfNoi9+8Yv89ttvR+vadV2kUin09vYGQ42GuI0qff0tLS244YYb0NTUFJnQpmmiu7sbEyZMuKQYAV3OWZUaIw/h3N+2trbIlxmmC4TmUF1dHcaNG4fW1lbccMMNupZZI3ZootPQ0BjxEPoWaGhoaKLT0NDQ0ESnoaGhoYlOQ0NDQxOdhoaGhiY6DQ0NDU10GhoaGproNDQ0NNFpaGhoaKLT0NDQ0ESnoaGhoYlOQ0NDQxOdhoaGhiY6DQ0NDU10GhoaGproNDQ0NNFpaGhoaKLT0NDQ0ESnoaGhoYlOQ0NDQxOdhsblgOM4Z0yJKhQKPNz3H/VzGh8/GPoWVA/5fJ7D+bBCCBDRsIOuC4UCu64LzwuGa4fDs4eba+k4Diulovmz4e+WUkIIEc3GBQAigpTyjKHIhUKBPc+D53lQSg36+XCWbz6fZ9d1oZQCM4OIIIRAbW3teY8rzOVyXD64OjyXfD7PnufB930wM4QQ0YeIkEqlaOg1l9+L8B4MN+x5uNnDjuNwOKTaMAz4vg8AcF2XM5lM9Hd9348GJxuGccZ5lH4GAD5y3mqhUODwGZVP3ruQ+6ehie5jjw8++IDfeOMNeJ4H27ZhmiYymQwmTJjAc+bMIQDo6+vjI0eOYPXq1WhsbAw3CPr7+zF37lwsWbLkjM174MABrF+/HkSEUaNGoVgs4sSJE7jqqqtw66234plnnkGxWEQmk4FlWchkMpg0aRJPmzYN5b9j9erVyGQyMAwDlmWhu7sbM2bMwKxZs7ipqYn+/d//Hb29vbj66qvh+z56enqQyWSwePFibm1tPedw4e7ubj59+jR27NiBgwcPwnEcNDU14ZZbbsH111+PZ5/7NfL5PEzTRDabhVIK6XQaSilYloXPfOYznEoEJLZm7Wvsui6WLl0aDZDetGkT3n//fXz5y18eRFTt7e389ttv4/bbb2fDMGDbNhUKBV61ahWOHTuGlpYWdHZ24tixY5g1axZOnTqFmpoavuOOO3D48GG8+eabSCQSqK+vR3d3N8aPH8+33HIL6urqCAD27t3La9aswaJFi3D99dcPuuZdu3ZxaRA1dXd3869//Wv09/djzJgxYGYcPnwYEydOxOc+9zm9ObTpOnJw+PBhPP7443jnnXdQW1sLwzDwzDPP4J/+6Z+wefNmBgDP87BlyxY89dRT2LNnD8aOHYtkMgkpJXp6enD69GkGMEgF7t69G7/4xS/Q1taGhoYGjBkzBrZtw/d95PN5/PKXv8S2bdvQ3NwM3/exevVqfOc738G2bduic3vzzTfxk5/8BN3d3Rg7diwSiQSUUsjlckilUjhy5Ag/+eST2LZtW7TxR48ejWKxiHQ6/ZET1IvFIp544gm8/fbbmDdvHq655hocPXoUe/fuRX8uy47jREpu8+bNePnll+F5HogIzIyenp6A4IsOP/PMM3jqqafQ0dEBAMhms7x37178/Oc/x29/+1v09fVFcmnHjh149913kc1mo3Ps7OyE7/tIpVIQQuDf/u3f8MILL0BKiZqaGpimiY6ODqxatQpPPfUUiAg1NTUoFAr4/ve/j3/8x39Ef38/A8C+ffvwi1/8Atu3bz/DhD1x4gS2bt0KAGhra8Ozzz6LXbt2wTAMpNPp6P5paEU3IhCqL8MwoJTC3Llz8eCDDxIASCn50UcfxQ033IAFCxbAtm0AwOjRo3Hrrbdi6dKl52XWpFIpLF26FDfeeCOklJg3bx5SqRQdP36cbdvG2LFjsWLFCgKAadOm8Te/+U384he/wMKFCwEgUk9z587FsmXLzjim53lcKBQwZcoU3H///RReUy6XYyE++l155MgRHDhwACtWrAivk+68804OldHnPvc5zqTSlM3neOfOnejs7MSyZcsw5erJ1J/LciYVmM+7d+/GsWPH0NPTg71792Js6xik02m6//77ecOGDfjtb3+LZcuWoaamBvl8nl955RU88MADaG5ujq5p7Nix9NBDD0Xn9uSTT/KpU6fw6U9/moaamXV1dZg3bx6uv/56Wr58Od59913+2c9+hkceeQSzZs0CM8NxHEgpzyD70BXgOA57nodisTjo2WtoRTeiEKovIQRSqRRM00RPTw8DQHNzM5qbm1FTUwPHcTiVSlE2m4XneaitrUUul+N8Pn9OZ3fohwOAuro6ymQyFPqSstksXNdFOp1GNpvlErmivr4eiUQC3d3d3N/fz5ZlwbKs6PeECNUREcF1XUgpB11TKpWi4XyMQ2HbNrq6urBu3bpISdbV1VE2m+VC0YmILJvNIplMwrbtyI+VSaWpUHS4u7eHn332Wdx7772or6/H7373O3T1dHOhUOAxY8bQPffcg8OHD2Pjxo3o6+vj3/72t0gmk1iyZMlZzy9UYZ2dnUNfTvB9H+l0OvLfAUDJT4eQ3EM/Yuh3HPpcMpkMbNsm0zRDf+Sg42poRTfi4HkeXNeNTLbDhw/z888/jy996Uu46667IkWQTCbR09OD3bt3w/M8FAoFTJs2jcePHz/shpVSIp/PY/369TBNkx3HwcSJEzFjxgxKpVIgInR3d6OtrQ1ExM899xwA4Atf+ALq6+ujQEOhUMDu3buRSqXY8zzMmDEDY8aMIQAIifDgwYPYsGEDd3d3o6GhAVOnTkVTU9NHEt3EiRNx33334bnnnsP3v/99PPDAA3zfffehsbFx0M8qpWDbNlKpVEQwhaLDCcumvXv3ck9PD77whS+gra0Nb7zxBo4ePYpZM68jALjrrrvwxhtv4JlnnsGyZcuwefNmfP7zn0c+n+fhghQlAialFNfW1p5BzDU1Ncjlcsjn82hra+Ndu3bh8OHDeOSRR9Da2hoSPph5UHCh/HkXCoXoz47jYMeOHVi9ejUzM1pbW/n666/X6k4T3QiTzqW3fy6XQy6Xw4EDB7Bnzx60tLREG6W/v5+llFBKYd++fShFEjFmzJhBv6t88/b39yOVSsF1XbS1taFQKGD8+PEAgoigbdvYuXMnVq5ciZ07d2L27Nn4zne+g5tuuonKCUZKia6uLhw6dAiO46Curg719fXMzPB9H5ZlIZ/P48SJE8hms7AsC6Zpnte119TU0De+8Q1MmjSJf/nLX+KHP/whtm/fjj/5kz/hSZMmUW9/H9dmasi2bXR3d6OjoyNSlwkreAH85je/wV133YVMKk333Xcfr1y5Ei+99BKmTZnKtm3T6NGjacWKFfx3f/d3+NGPfoSGhgZMnjwZZyO58msnGvxXstksurq60NnZibVr1+LgwYMAgL/8y7/E5MmTMWrUKAKA7u5uJBIJpNPpM56NbdtRFNy2bdTW1sJxHBw/fjxaD729vayjrproRhSKxSJM00RzczOuv/56TJkyBYsXL8Yf/dEfIZfL4b/9t//GoQJraWnB0qVLcfPNNwNApLxChJvXcRy2LAtKKdxwww248847USwW0dLSQuWbeM6cObjrrruwefNmHD16FC0tLejv748ilEQEy7Iwf/58LFu2LPT7Rcfs6enhYrGIsWPHRpFf0zTPOK+zIZfLcSqVovvvv5+WLFnCP//5z/HDH/4QjuPgBz/4AWozNVQoOuz7PmpqalBXV4dUKhX9/Lu7d/F7772Hz33uc9h/8ACPGzcOEyZMwMaNG/Hp++7HjBkzAAArVqygdevW8f/5P/8Hjz/++BmKcTgQ0RlBgUQiASEExo8fj0996lNYvXo1XnvtNSSTyUG/07Is9PT0oK+v74xnU06ehUIBruti0qRJuOeee2DbNogI5RFiDe2jGxEwTROWZaGurg6jRo2i8ePH08yZM3HPPffghRdewOHDh5FOpymbzaKnpwfpdBrJZPKcZGLbNiUSCfT29qK+vh4NDQ1UV1c3SEUahgEhBKZOnYqvf/3r2L59O5566ilkMhkKfYVCCPT09KC2thapVIqG+upc14XruqipqUFTUxMlk0kkEonzvvYynyHX19fTN77xDbrvvvuwcuVKbNy8iUPl1tfXFxFPLpeLfv6VV14BEeH//b//hx//+Mf453/+Z3iehw8//BDr168fdKyrrroKmUwGU6dOPa9zcxwHhmGEhMSO47BpmnAcB77vg4jw53/+51RTU4OvfvWr6O3tZcdx2HEcbmxsREtLCyzLQqFQ4KGqMPy94TOora1FY2Nj5LPT0IpuxEEphWKxCN/3o0hsMpnE7t27MXr0aIwdOxaO4zARwbZt9Pf3f2TaRqgWampqIgVRriSICLlcDrW1tbBtm2677TZs2bKF/+3f/g2tra386KOPkuM4nEwmkU6nIxM6jIaWERUMw4ic7uVK5Gw+sOESdcPkYwAYN24cDMNAfW1dpPjqa+vg5AsQIBgiIIKjR4/ynvfex1/9xV9i0qRJ0T354IMP+M///M+xbds2HD58mK+66ioKlXNIyucDy7IiRReebzab5UwmEyldAPif//N/4sEHH8RXv/pVPPHEE0in0ySlZNu2sW/fPnR0dGDcuHEhefL69etx++23o1AoMDNHZJfP588rUq2hie6KQrmJ6DgOjh49ig8//BCnT5/ml19+GYcPH8b3vvc9jBo1Cj09PUgkEigWi2hvb8fq1av51KlTOHHiBKZOnYply5YhnU5TSAwAwMwoFovIZrNnHDvMFzt16lRUTfDoo4/iwIED+Id/+AeMHj2a7777buru7malFA4cOIBkMsknT57Ehx9+iKamJtxzzz3o6upCOp1Gf38/3nrrLe7r68PRo0fR3d2Nu+++G62trfy9730PxWIR3/72t9Ha2jooGnvgwAHesWMHrr76akyZMgWbN2/G66+/jgceeADjxo3D0CixEAKO4wAAVq5ciXHjxqGpqWkQ8Tc3N2PZsmV48skn8cEHH+Cqq66KVGyY0FzuOzsbPM87Q12F99j3/cgPOXHiRPr2t7/N3/nOd/DXf/3X+M53vsM333wzPfTQQ/yTn/wEV111Fe666y7u7u7Ghg0bkM1mcffdd1PpGBz6ULds2YJCoYC2tjb09vby17/+9Y/0I2poovvYIyS5cePG4e6774bjOPjNb34Dy7IwdepUPPPMM7j66qsp9A1de+21PH/+fOzfvx979uxBsVhEsVjEhAkTIkUUEkM+n+cbbrgBDz30ECZPnlxujrFt21RbW4sFCxZg9uzZEUm0trbSY489xqlUCocOHQIATJ06FZ/+9Kdx4sQJ7N27F/l8HkqpyDzNZDJYvnw5+vv78eqrr6KzsxNKKbS0tKCvrw/Tp0+nmTNncslHdUaJlm3byGazeOmll6LysSVLluArX/nKoBKoVCqFRYsWYebMmWhubo4Ibfbs2VEAIERdXR0tW7aMOzo6UFtbi/7+fiYizJw5E1/4whfOi+RKfj10dXWdoURvvPFGTJo0adDv+fznP0979+5lx3Fw+vRpZDIZ3H///WhsbMSWLVvwr//6r0gkEmhqasLf//3fRz/X0tKChQsXolgsYu3atejv7wczo6GhQW+QKoGGC41rVBZnq7cMyaCjo4NHjx5NQ78f7u+WK8QyfxCXm4XD/Y7yc1FKDVu3eSEYesyznS8wEIwovxflJu/Q+zPc7x7umsp/R/mfz3X9w+Fs5nf5eZ/r+/Lnd75rYLg1oaGJbsRg6Ca+1AV/oZv6Qsh4uGOdrXj+XCb7RxFjJV8mF3s/zkWUIbF1dnbyUGUZ/t3ynxnu72lootMYRlV8FPGcTc1UghQvhJSGU5jl6O7u5vNNQzkbgZXMejqXyrpSlLzG5YEO/8SM8yn3KRQK5QnAZxTuD4dyYvsokisUClwoFCKSy+Vy5zyn8yW5QqFwTpLL5XKXRHLhfSi/F+eKWMZZWtXb2zs0fYQ/6s/l5x2mpOgdoRXdJwaVfNNX4nedryLUz0mrtCsV/384sCb4Hy3b/wAAAABJRU5ErkJggg==" alt="Alpstay — Be free. Stay true."></header>
+
+  <section class="view active" id="view-form">
+    <div class="wrap-narrow">
+      <h1 data-i18n="title">Prenotazione Transfer</h1>
+      <p class="lead" data-i18n="lead">Servizio transfer ufficiale da e per le strutture Alpstay. La richiesta viene inviata direttamente al fornitore Limousine Service Dolomiti.</p>
+      <div class="rule"></div>
+
+      <div style="border:1px solid var(--field-border);border-left:3px solid var(--gold);border-radius:3px;padding:18px 20px;margin:34px 0 4px;text-align:left">
+        <p style="margin:0 0 8px;font-size:15px" data-i18n-html="notice1"><strong>Hai bisogno di un transfer</strong> (da/per aeroporto, stazione o altra località)? Compila il modulo qui sotto e invia la richiesta.</p>
+        <p style="margin:0;font-size:15px;color:var(--ink-soft)" data-i18n-html="notice2">PLACEHOLDER</p>
+      </div>
+
+      <div class="success" id="success">
+        <div class="check">&#10003;</div>
+        <h2 data-i18n="succ_title">Richiesta registrata</h2>
+        <div class="code" id="successCode"></div>
+        <p id="successText"></p>
+        <button class="ghost-btn" id="againBtn" type="button" data-i18n="again">Nuova richiesta</button>
+      </div>
+
+      <form id="transferForm" novalidate style="padding-top:40px">
+        <div class="section">
+          <div class="section-head"><span class="section-title" data-i18n="sec_pass">Passeggero</span><span class="section-bar"></span></div>
+          <div class="grid">
+            <div class="field"><label for="nome"><span data-i18n="f_nome">Nome</span><span class="req">*</span></label><input type="text" id="nome" autocomplete="given-name" required><span class="err-msg" data-i18n="err_req">Campo obbligatorio</span></div>
+            <div class="field"><label for="cognome"><span data-i18n="f_cognome">Cognome</span><span class="req">*</span></label><input type="text" id="cognome" autocomplete="family-name" required><span class="err-msg" data-i18n="err_req">Campo obbligatorio</span></div>
+            <div class="field"><label for="email" data-i18n="f_email">Email di contatto</label><input type="email" id="email" autocomplete="email" data-i18n-ph="ph_email" placeholder="per la conferma"><span class="err-msg" data-i18n="err_email">Email non valida</span></div>
+            <div class="field"><label for="telefono" data-i18n="f_tel">Telefono di contatto</label><input type="tel" id="telefono" autocomplete="tel" placeholder="+39 ..."></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-head"><span class="section-title" data-i18n="sec_details">Dettagli transfer</span><span class="section-bar"></span></div>
+          <div class="grid">
+            <div class="field"><label for="tipo"><span data-i18n="f_tipo">Tipo di transfer</span><span class="req">*</span></label>
+              <select id="tipo" required><option value="" data-i18n="opt_sel">Seleziona…</option><option data-i18n="opt_tipo_arr">Arrivo (verso la struttura)</option><option data-i18n="opt_tipo_par">Partenza (dalla struttura)</option><option data-i18n="opt_tipo_altro">Altro tragitto</option></select>
+              <span class="err-msg" data-i18n="err_sel">Seleziona un'opzione</span></div>
+            <div class="field"><label for="struttura"><span data-i18n="f_struttura">Struttura Alpstay</span><span class="req">*</span></label>
+              <select id="struttura" required><option value="" data-i18n="opt_sel">Seleziona…</option><option>Alpstay Chalet Hartmann</option><option>Alpstay Smart Hotel Saslong</option><option>Alpstay Acadia Mountain Home</option></select>
+              <span class="err-msg" data-i18n="err_struct">Seleziona una struttura</span></div>
+            <div class="field"><label for="data"><span data-i18n="f_data">Data</span><span class="req">*</span></label><input type="date" id="data" required><span class="err-msg" data-i18n="err_req">Campo obbligatorio</span></div>
+            <div class="field"><label for="ora"><span data-i18n="f_ora">Ora</span><span class="req">*</span></label><input type="time" id="ora" required><span class="err-msg" data-i18n="err_req">Campo obbligatorio</span></div>
+            <div class="field full"><label for="riferimento"><span data-i18n="f_rif">L'orario indicato si riferisce a</span><span class="req">*</span></label>
+              <select id="riferimento" required><option value="" data-i18n="opt_sel">Seleziona…</option><option value="partenza" data-i18n="opt_rif_par">Orario di PARTENZA — dal luogo di partenza</option><option value="arrivo" data-i18n="opt_rif_arr">Orario di ARRIVO — a destinazione</option></select>
+              <span class="err-msg" data-i18n="err_sel">Seleziona un'opzione</span>
+              <span class="hint" data-i18n="hint_rif">Indica se l'orario è quello in cui si parte dal luogo di ritiro oppure quello in cui si deve arrivare a destinazione.</span></div>
+            <div class="field"><label for="partenza"><span data-i18n="f_partenza">Luogo di partenza</span><span class="req">*</span></label><input type="text" id="partenza" data-i18n-ph="ph_partenza" placeholder="es. Aeroporto di Verona" required><span class="err-msg" data-i18n="err_req">Campo obbligatorio</span></div>
+            <div class="field"><label for="arrivo"><span data-i18n="f_arrivo">Luogo di arrivo</span><span class="req">*</span></label><input type="text" id="arrivo" data-i18n-ph="ph_arrivo" placeholder="es. Hotel a Selva" required><span class="err-msg" data-i18n="err_req">Campo obbligatorio</span></div>
+            <div class="field"><label for="volo" data-i18n="f_volo">Numero del volo</label><input type="text" id="volo" data-i18n-ph="ph_volo" placeholder="se applicabile"></div>
+            <div class="field"><label for="persone"><span data-i18n="f_persone">Numero di persone</span><span class="req">*</span></label><input type="number" id="persone" min="1" step="1" value="1" required><span class="err-msg" data-i18n="err_num">Inserisci un valore</span></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-head"><span class="section-title" data-i18n="sec_lugg">Bagagli</span><span class="section-bar"></span></div>
+          <div class="grid">
+            <div class="field"><label for="bagaglio" data-i18n="f_bagaglio">Bagagli / valigie</label><input type="number" id="bagaglio" min="0" step="1" value="0"></div>
+            <div class="field"><label for="sacche" data-i18n="f_sacche">Sacche da sci</label><input type="number" id="sacche" min="0" step="1" value="0"></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-head"><span class="section-title" data-i18n="sec_notes">Note</span><span class="section-bar"></span></div>
+          <div class="grid"><div class="field full"><label for="note" data-i18n="f_note">Note aggiuntive</label><textarea id="note" data-i18n-ph="ph_note" placeholder="Seggiolino per bambini, orario flessibile, richieste particolari…"></textarea></div></div>
+        </div>
+
+        <div class="submit-row">
+          <button type="submit" class="submit" id="submitBtn" data-i18n="btn_submit">Invia richiesta</button>
+          <p class="hint" data-i18n="submit_hint">La richiesta sarà inviata a info@limousinedolomiti.com · in copia a info@alpstay.eu</p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="view" id="view-offerta" style="display:none">
+    <div class="wrap-narrow" id="offerBox"></div>
+  </section>
+
+  <footer>
+    <div class="footer-label" data-i18n="foot_label">Fornitore ufficiale del servizio</div>
+    <div class="footer-name">Limousine Service Dolomiti</div>
+    <div class="footer-links">
+      <a href="mailto:info@limousinedolomiti.com">info@limousinedolomiti.com</a>
+      <a href="tel:+393356345264">+39 335 6345264</a>
+      <a href="http://www.taxi-val-gardena.it/it/" target="_blank" rel="noopener">taxi-val-gardena.it</a>
+    </div>
+    <p class="footer-note" data-i18n="foot_note">Servizio transfer riservato agli ospiti delle strutture Alpstay · alpstay.eu</p>
+    <p class="mode-flag" id="modeFlag"></p>
+  </footer>
+</div>
+
+<script>
+/* === Pagina OSPITE — Realtime Database (dati) + EmailJS (email). ===
+   Incolla la config Firebase e i dati EmailJS qui sotto.
+   Finché restano vuoti, la pagina funziona in modalità DEMO (dati locali). */
+const CONFIG = {
+  FIREBASE: { apiKey:'AIzaSyD3j-k47EqEZ-RyNgO_h1JpA1_mgis2Zb4', authDomain:'taxi-6c9f5.firebaseapp.com', databaseURL:'https://taxi-6c9f5-default-rtdb.europe-west1.firebasedatabase.app', projectId:'taxi-6c9f5', appId:'1:705863760679:web:aaa204dac556189c3a0702' },
+  EMAILJS:  { publicKey:'', serviceId:'', templateId:'template_w4b5v7d' },
+  TO_EMAIL:'info@limousinedolomiti.com', CC_EMAIL:'info@alpstay.eu',
+  ADMIN_URL:'',   // URL pubblico della pagina admin (per il link al fornitore nelle email)
+  GUEST_URL:''    // URL pubblico di questa pagina (per il link "accetto" — di solito non serve qui)
+};
+const FB_ON  = !!CONFIG.FIREBASE.projectId && typeof firebase!=='undefined';
+const EJS_ON = !!CONFIG.EMAILJS.publicKey && typeof emailjs!=='undefined';
+let db=null;
+if(FB_ON){ firebase.initializeApp(CONFIG.FIREBASE); db=firebase.database(); }
+if(EJS_ON){ emailjs.init({publicKey:CONFIG.EMAILJS.publicKey}); }
+
+const $ = s => document.querySelector(s);
+const esc = s => (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmtDate = iso => { if(!iso) return ''; const [y,m,d]=String(iso).split('-'); return `${d}/${m}/${y}`; };
+const eur = n => (Number(n)||0).toLocaleString('it-IT',{style:'currency',currency:'EUR'});
+function genId(){ const d=new Date(); const p=n=>String(n).padStart(2,'0');
+  return 'ALP-'+String(d.getFullYear()).slice(2)+p(d.getMonth()+1)+p(d.getDate())+'-'+Math.random().toString(36).slice(2,6).toUpperCase(); }
+
+/* ============ TRADUZIONI (IT · DE · EN · 中文 · 한국어) ============ */
+let lang='it'; let lastSuccess=null;
+const PHONE_LINK='<a href="tel:+393356345264" style="color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold);white-space:nowrap">+39 335 6345264</a>';
+const I18N={
+ it:{
+  title:"Prenotazione Transfer",
+  lead:"Servizio transfer ufficiale da e per le strutture Alpstay. La richiesta viene inviata direttamente al fornitore Limousine Service Dolomiti.",
+  notice1:"<strong>Hai bisogno di un transfer</strong> (da/per aeroporto, stazione o altra località)? Compila il modulo qui sotto e invia la richiesta.",
+  notice2:"Per una <strong>corsa breve</strong> contatta direttamente Limousine Service Dolomiti: "+PHONE_LINK,
+  succ_title:"Richiesta registrata", again:"Nuova richiesta",
+  sec_pass:"Passeggero", sec_details:"Dettagli transfer", sec_lugg:"Bagagli", sec_notes:"Note",
+  f_nome:"Nome", f_cognome:"Cognome", f_email:"Email di contatto", f_tel:"Telefono di contatto",
+  f_tipo:"Tipo di transfer", f_struttura:"Struttura Alpstay", f_data:"Data", f_ora:"Ora",
+  f_rif:"L'orario indicato si riferisce a", f_partenza:"Luogo di partenza", f_arrivo:"Luogo di arrivo",
+  f_volo:"Numero del volo", f_persone:"Numero di persone", f_bagaglio:"Bagagli / valigie", f_sacche:"Sacche da sci", f_note:"Note aggiuntive",
+  ph_email:"per la conferma", ph_partenza:"es. Aeroporto di Verona", ph_arrivo:"es. Hotel a Selva", ph_volo:"se applicabile", ph_note:"Seggiolino per bambini, orario flessibile, richieste particolari…",
+  opt_sel:"Seleziona…", opt_tipo_arr:"Arrivo (verso la struttura)", opt_tipo_par:"Partenza (dalla struttura)", opt_tipo_altro:"Altro tragitto",
+  opt_rif_par:"Orario di PARTENZA — dal luogo di partenza", opt_rif_arr:"Orario di ARRIVO — a destinazione",
+  hint_rif:"Indica se l'orario è quello in cui si parte dal luogo di ritiro oppure quello in cui si deve arrivare a destinazione.",
+  err_req:"Campo obbligatorio", err_email:"Email non valida", err_sel:"Seleziona un'opzione", err_struct:"Seleziona una struttura", err_num:"Inserisci un valore",
+  btn_submit:"Invia richiesta", submit_hint:"La richiesta sarà inviata a info@limousinedolomiti.com · in copia a info@alpstay.eu",
+  foot_label:"Fornitore ufficiale del servizio", foot_note:"Servizio transfer riservato agli ospiti delle strutture Alpstay · alpstay.eu",
+  js_sending:"Invio in corso…", js_succ_code:"Codice richiesta · ",
+  js_succ_real:"La richiesta è stata inviata a Limousine Service Dolomiti, con copia ad Alpstay. Verrà confermata a breve.",
+  js_succ_demo:"Richiesta registrata in modalità demo. Configura Firebase/EmailJS per l'invio reale.",
+  o_loading:"Caricamento offerta…", o_title:"La tua offerta", o_lead:"Limousine Service Dolomiti è disponibile per il tuo transfer. Accetta per confermare il servizio.",
+  s_ritiro:"Orario di ritiro", s_tragitto:"Tragitto", s_volo:"Volo", s_persone:"Persone", w_valigie:"valigie", w_sci:"sci", s_mezzo:"Mezzo", s_prezzo:"Prezzo del servizio", s_note:"Note", s_cond:"Condizioni generali",
+  o_accept:"Accetto l'offerta", o_confirming:"Conferma in corso…", o_pay:"Paga ora · ", o_hint:"Accettando, il servizio risulterà confermato e Limousine Service Dolomiti verrà avvisata.",
+  o_notfound_t:"Offerta non trovata", o_notfound_p:"Controlla il link ricevuto via email o contatta la struttura.", o_err:"Operazione non riuscita, riprova.",
+  c_title:"Servizio confermato", c_text:"Grazie {nome}, la tua accettazione è registrata. Limousine Service Dolomiti ti attenderà come da dettagli.",
+  c_ritiro:"Ritiro", c_prezzo:"Prezzo", c_pay:"Completa il pagamento · ", c_code:"Codice {id} · per assistenza +39 335 6345264"
+ },
+ de:{
+  title:"Transfer-Buchung",
+  lead:"Offizieller Transferservice von und zu den Alpstay-Unterkünften. Ihre Anfrage wird direkt an den Anbieter Limousine Service Dolomiti gesendet.",
+  notice1:"<strong>Brauchen Sie einen Transfer</strong> (von/zu Flughafen, Bahnhof oder anderem Ort)? Füllen Sie das Formular aus und senden Sie die Anfrage.",
+  notice2:"Für eine <strong>kurze Fahrt</strong> kontaktieren Sie direkt Limousine Service Dolomiti: "+PHONE_LINK,
+  succ_title:"Anfrage eingegangen", again:"Neue Anfrage",
+  sec_pass:"Fahrgast", sec_details:"Transferdetails", sec_lugg:"Gepäck", sec_notes:"Anmerkungen",
+  f_nome:"Vorname", f_cognome:"Nachname", f_email:"Kontakt-E-Mail", f_tel:"Kontakttelefon",
+  f_tipo:"Art des Transfers", f_struttura:"Alpstay-Unterkunft", f_data:"Datum", f_ora:"Uhrzeit",
+  f_rif:"Die angegebene Uhrzeit bezieht sich auf", f_partenza:"Abholort", f_arrivo:"Zielort",
+  f_volo:"Flugnummer", f_persone:"Anzahl der Personen", f_bagaglio:"Gepäck / Koffer", f_sacche:"Skitaschen", f_note:"Zusätzliche Anmerkungen",
+  ph_email:"für die Bestätigung", ph_partenza:"z. B. Flughafen Verona", ph_arrivo:"z. B. Hotel in Wolkenstein", ph_volo:"falls zutreffend", ph_note:"Kindersitz, flexible Uhrzeit, besondere Wünsche…",
+  opt_sel:"Auswählen…", opt_tipo_arr:"Ankunft (zur Unterkunft)", opt_tipo_par:"Abreise (von der Unterkunft)", opt_tipo_altro:"Andere Strecke",
+  opt_rif_par:"ABFAHRTSzeit — vom Abholort", opt_rif_arr:"ANKUNFTSzeit — am Zielort",
+  hint_rif:"Geben Sie an, ob die Uhrzeit die Abfahrt vom Abholort oder die gewünschte Ankunft am Zielort ist.",
+  err_req:"Pflichtfeld", err_email:"Ungültige E-Mail", err_sel:"Bitte auswählen", err_struct:"Unterkunft auswählen", err_num:"Wert eingeben",
+  btn_submit:"Anfrage senden", submit_hint:"Die Anfrage wird an info@limousinedolomiti.com gesendet · in Kopie an info@alpstay.eu",
+  foot_label:"Offizieller Anbieter des Services", foot_note:"Transferservice für Gäste der Alpstay-Unterkünfte · alpstay.eu",
+  js_sending:"Wird gesendet…", js_succ_code:"Anfragecode · ",
+  js_succ_real:"Ihre Anfrage wurde an Limousine Service Dolomiti gesendet, in Kopie an Alpstay. Sie wird in Kürze bestätigt.",
+  js_succ_demo:"Anfrage im Demo-Modus gespeichert. Konfigurieren Sie Firebase/EmailJS für den echten Versand.",
+  o_loading:"Angebot wird geladen…", o_title:"Ihr Angebot", o_lead:"Limousine Service Dolomiti steht für Ihren Transfer zur Verfügung. Akzeptieren Sie, um den Service zu bestätigen.",
+  s_ritiro:"Abholzeit", s_tragitto:"Strecke", s_volo:"Flug", s_persone:"Personen", w_valigie:"Koffer", w_sci:"Ski", s_mezzo:"Fahrzeug", s_prezzo:"Preis des Service", s_note:"Anmerkungen", s_cond:"Allgemeine Bedingungen",
+  o_accept:"Angebot annehmen", o_confirming:"Wird bestätigt…", o_pay:"Jetzt bezahlen · ", o_hint:"Mit der Annahme gilt der Service als bestätigt und Limousine Service Dolomiti wird benachrichtigt.",
+  o_notfound_t:"Angebot nicht gefunden", o_notfound_p:"Bitte prüfen Sie den per E-Mail erhaltenen Link oder kontaktieren Sie die Unterkunft.", o_err:"Vorgang fehlgeschlagen, bitte erneut versuchen.",
+  c_title:"Service bestätigt", c_text:"Danke {nome}, Ihre Annahme ist registriert. Limousine Service Dolomiti erwartet Sie wie angegeben.",
+  c_ritiro:"Abholung", c_prezzo:"Preis", c_pay:"Zahlung abschließen · ", c_code:"Code {id} · für Unterstützung +39 335 6345264"
+ },
+ en:{
+  title:"Transfer Booking",
+  lead:"Official transfer service to and from the Alpstay properties. Your request is sent directly to the provider, Limousine Service Dolomiti.",
+  notice1:"<strong>Need a transfer</strong> (to/from airport, station or another location)? Fill in the form below and send your request.",
+  notice2:"For a <strong>short ride</strong> contact Limousine Service Dolomiti directly: "+PHONE_LINK,
+  succ_title:"Request received", again:"New request",
+  sec_pass:"Passenger", sec_details:"Transfer details", sec_lugg:"Luggage", sec_notes:"Notes",
+  f_nome:"First name", f_cognome:"Last name", f_email:"Contact email", f_tel:"Contact phone",
+  f_tipo:"Transfer type", f_struttura:"Alpstay property", f_data:"Date", f_ora:"Time",
+  f_rif:"The time entered refers to", f_partenza:"Pick-up location", f_arrivo:"Drop-off location",
+  f_volo:"Flight number", f_persone:"Number of people", f_bagaglio:"Bags / suitcases", f_sacche:"Ski bags", f_note:"Additional notes",
+  ph_email:"for confirmation", ph_partenza:"e.g. Verona Airport", ph_arrivo:"e.g. Hotel in Selva", ph_volo:"if applicable", ph_note:"Child seat, flexible time, special requests…",
+  opt_sel:"Select…", opt_tipo_arr:"Arrival (to the property)", opt_tipo_par:"Departure (from the property)", opt_tipo_altro:"Other route",
+  opt_rif_par:"DEPARTURE time — from the pick-up location", opt_rif_arr:"ARRIVAL time — at the destination",
+  hint_rif:"Indicate whether the time is when you leave the pick-up location or when you need to arrive at the destination.",
+  err_req:"Required field", err_email:"Invalid email", err_sel:"Select an option", err_struct:"Select a property", err_num:"Enter a value",
+  btn_submit:"Send request", submit_hint:"Your request will be sent to info@limousinedolomiti.com · cc to info@alpstay.eu",
+  foot_label:"Official service provider", foot_note:"Transfer service reserved for guests of Alpstay properties · alpstay.eu",
+  js_sending:"Sending…", js_succ_code:"Request code · ",
+  js_succ_real:"Your request has been sent to Limousine Service Dolomiti, with a copy to Alpstay. It will be confirmed shortly.",
+  js_succ_demo:"Request saved in demo mode. Configure Firebase/EmailJS for real sending.",
+  o_loading:"Loading offer…", o_title:"Your offer", o_lead:"Limousine Service Dolomiti is available for your transfer. Accept to confirm the service.",
+  s_ritiro:"Pick-up time", s_tragitto:"Route", s_volo:"Flight", s_persone:"People", w_valigie:"suitcases", w_sci:"ski", s_mezzo:"Vehicle", s_prezzo:"Service price", s_note:"Notes", s_cond:"General conditions",
+  o_accept:"Accept the offer", o_confirming:"Confirming…", o_pay:"Pay now · ", o_hint:"By accepting, the service will be confirmed and Limousine Service Dolomiti will be notified.",
+  o_notfound_t:"Offer not found", o_notfound_p:"Please check the link you received by email or contact the property.", o_err:"Operation failed, please try again.",
+  c_title:"Service confirmed", c_text:"Thank you {nome}, your acceptance is recorded. Limousine Service Dolomiti will be waiting for you as detailed.",
+  c_ritiro:"Pick-up", c_prezzo:"Price", c_pay:"Complete payment · ", c_code:"Code {id} · for assistance +39 335 6345264"
+ },
+ zh:{
+  title:"接送预订",
+  lead:"往返 Alpstay 住宿的官方接送服务。您的申请将直接发送给服务商 Limousine Service Dolomiti。",
+  notice1:"<strong>需要接送服务</strong>（往返机场、车站或其他地点）？请填写下方表单并提交申请。",
+  notice2:"如需<strong>短途乘车</strong>，请直接联系 Limousine Service Dolomiti："+PHONE_LINK,
+  succ_title:"申请已提交", again:"新的申请",
+  sec_pass:"乘客", sec_details:"接送详情", sec_lugg:"行李", sec_notes:"备注",
+  f_nome:"名字", f_cognome:"姓氏", f_email:"联系邮箱", f_tel:"联系电话",
+  f_tipo:"接送类型", f_struttura:"Alpstay 住宿", f_data:"日期", f_ora:"时间",
+  f_rif:"所填时间指", f_partenza:"上车地点", f_arrivo:"到达地点",
+  f_volo:"航班号", f_persone:"人数", f_bagaglio:"行李 / 行李箱", f_sacche:"滑雪包", f_note:"其他备注",
+  ph_email:"用于确认", ph_partenza:"例如：维罗纳机场", ph_arrivo:"例如：塞尔瓦的酒店", ph_volo:"如适用", ph_note:"儿童座椅、时间灵活、特殊要求……",
+  opt_sel:"请选择…", opt_tipo_arr:"抵达（前往住宿）", opt_tipo_par:"出发（离开住宿）", opt_tipo_altro:"其他行程",
+  opt_rif_par:"出发时间 — 从上车地点", opt_rif_arr:"到达时间 — 在目的地",
+  hint_rif:"请说明该时间是从上车地点出发的时间，还是需要到达目的地的时间。",
+  err_req:"必填项", err_email:"邮箱无效", err_sel:"请选择一项", err_struct:"请选择住宿", err_num:"请输入数值",
+  btn_submit:"提交申请", submit_hint:"申请将发送至 info@limousinedolomiti.com · 抄送 info@alpstay.eu",
+  foot_label:"官方服务提供商", foot_note:"本接送服务仅限 Alpstay 住宿的客人 · alpstay.eu",
+  js_sending:"提交中…", js_succ_code:"申请编号 · ",
+  js_succ_real:"您的申请已发送至 Limousine Service Dolomiti，并抄送 Alpstay，稍后将予以确认。",
+  js_succ_demo:"已在演示模式下保存申请。请配置 Firebase/EmailJS 以实际发送。",
+  o_loading:"正在加载报价…", o_title:"您的报价", o_lead:"Limousine Service Dolomiti 可为您提供接送服务。点击接受以确认服务。",
+  s_ritiro:"接载时间", s_tragitto:"行程", s_volo:"航班", s_persone:"人数", w_valigie:"件行李", w_sci:"滑雪包", s_mezzo:"车辆", s_prezzo:"服务价格", s_note:"备注", s_cond:"一般条款",
+  o_accept:"接受报价", o_confirming:"确认中…", o_pay:"立即支付 · ", o_hint:"接受后，服务即视为确认，并会通知 Limousine Service Dolomiti。",
+  o_notfound_t:"未找到报价", o_notfound_p:"请检查您通过邮件收到的链接，或联系住宿方。", o_err:"操作失败，请重试。",
+  c_title:"服务已确认", c_text:"谢谢您，{nome}，您的接受已记录。Limousine Service Dolomiti 将按所示详情等候您。",
+  c_ritiro:"接载", c_prezzo:"价格", c_pay:"完成支付 · ", c_code:"编号 {id} · 如需协助 +39 335 6345264"
+ },
+ ko:{
+  title:"트랜스퍼 예약",
+  lead:"Alpstay 숙소를 오가는 공식 트랜스퍼 서비스입니다. 요청은 공급업체인 Limousine Service Dolomiti로 직접 전송됩니다.",
+  notice1:"<strong>트랜스퍼가 필요하신가요?</strong> (공항·역 또는 다른 장소로/에서) 아래 양식을 작성해 요청을 보내주세요.",
+  notice2:"<strong>단거리 이동</strong>은 Limousine Service Dolomiti로 직접 연락하세요: "+PHONE_LINK,
+  succ_title:"요청이 접수되었습니다", again:"새 요청",
+  sec_pass:"탑승객", sec_details:"트랜스퍼 정보", sec_lugg:"수하물", sec_notes:"메모",
+  f_nome:"이름", f_cognome:"성", f_email:"연락 이메일", f_tel:"연락 전화",
+  f_tipo:"트랜스퍼 유형", f_struttura:"Alpstay 숙소", f_data:"날짜", f_ora:"시간",
+  f_rif:"입력한 시간 기준", f_partenza:"픽업 장소", f_arrivo:"도착 장소",
+  f_volo:"항공편 번호", f_persone:"인원수", f_bagaglio:"가방 / 수하물", f_sacche:"스키백", f_note:"추가 메모",
+  ph_email:"확인용", ph_partenza:"예: 베로나 공항", ph_arrivo:"예: 셀바의 호텔", ph_volo:"해당 시", ph_note:"유아용 카시트, 유연한 시간, 특별 요청…",
+  opt_sel:"선택…", opt_tipo_arr:"도착 (숙소로)", opt_tipo_par:"출발 (숙소에서)", opt_tipo_altro:"기타 경로",
+  opt_rif_par:"출발 시간 — 출발 장소에서", opt_rif_arr:"도착 시간 — 목적지에서",
+  hint_rif:"입력한 시간이 픽업 장소에서 떠나는 시간인지, 목적지에 도착해야 하는 시간인지 표시해 주세요.",
+  err_req:"필수 입력", err_email:"잘못된 이메일", err_sel:"항목을 선택하세요", err_struct:"숙소를 선택하세요", err_num:"값을 입력하세요",
+  btn_submit:"요청 보내기", submit_hint:"요청은 info@limousinedolomiti.com 으로 전송되며 info@alpstay.eu 에 참조됩니다",
+  foot_label:"공식 서비스 제공업체", foot_note:"Alpstay 숙소 고객 전용 트랜스퍼 서비스 · alpstay.eu",
+  js_sending:"전송 중…", js_succ_code:"요청 코드 · ",
+  js_succ_real:"요청이 Limousine Service Dolomiti로 전송되었으며 Alpstay에 사본이 전달되었습니다. 곧 확정됩니다.",
+  js_succ_demo:"데모 모드로 요청이 저장되었습니다. 실제 전송하려면 Firebase/EmailJS를 설정하세요.",
+  o_loading:"제안을 불러오는 중…", o_title:"제안 내용", o_lead:"Limousine Service Dolomiti가 트랜스퍼를 제공할 수 있습니다. 수락하면 서비스가 확정됩니다.",
+  s_ritiro:"픽업 시간", s_tragitto:"경로", s_volo:"항공편", s_persone:"인원", w_valigie:"수하물", w_sci:"스키", s_mezzo:"차량", s_prezzo:"서비스 요금", s_note:"메모", s_cond:"일반 약관",
+  o_accept:"제안 수락", o_confirming:"확인 중…", o_pay:"지금 결제 · ", o_hint:"수락하면 서비스가 확정되고 Limousine Service Dolomiti에 통보됩니다.",
+  o_notfound_t:"제안을 찾을 수 없습니다", o_notfound_p:"이메일로 받은 링크를 확인하거나 숙소에 문의하세요.", o_err:"처리에 실패했습니다. 다시 시도하세요.",
+  c_title:"서비스 확정됨", c_text:"{nome}님, 수락이 기록되었습니다. Limousine Service Dolomiti가 안내된 내용대로 기다립니다.",
+  c_ritiro:"픽업", c_prezzo:"요금", c_pay:"결제 완료 · ", c_code:"코드 {id} · 문의 +39 335 6345264"
+ }
+};
+function t(k,vars){ let s=(I18N[lang]&&I18N[lang][k]!=null)?I18N[lang][k]:(I18N.it[k]!=null?I18N.it[k]:k); if(vars) for(const p in vars) s=s.split('{'+p+'}').join(vars[p]); return s; }
+function applyI18n(){ const d=I18N[lang]||I18N.it;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{ const k=el.getAttribute('data-i18n'); if(d[k]!=null) el.textContent=d[k]; });
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{ const k=el.getAttribute('data-i18n-html'); if(d[k]!=null) el.innerHTML=d[k]; });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{ const k=el.getAttribute('data-i18n-ph'); if(d[k]!=null) el.setAttribute('placeholder',d[k]); });
+}
+function refreshDynamic(){
+  if($('#view-offerta').style.display==='block' && typeof offerId!=='undefined' && offerId){ renderOffer(offerId); }
+  if($('#success') && $('#success').classList.contains('show') && lastSuccess){ $('#successText').textContent=lastSuccess.real?t('js_succ_real'):t('js_succ_demo'); $('#successCode').textContent=t('js_succ_code')+lastSuccess.id; }
+}
+function setLang(l){ if(!I18N[l]) l='it'; lang=l; document.documentElement.lang=l;
+  document.title=t('title')+' · Alpstay';
+  document.querySelectorAll('.langbtn').forEach(b=>b.classList.toggle('active', b.getAttribute('data-lang')===l));
+  applyI18n(); refreshDynamic();
+}
+document.querySelectorAll('.langbtn').forEach(b=>b.addEventListener('click',()=>setLang(b.getAttribute('data-lang'))));
+
+const Store = {
+  _mem: [],
+  async _localGet(){ if(window.storage){ try{ const r=await window.storage.get('alpstay_bookings',true); return r?JSON.parse(r.value):[]; }catch(e){ return []; } } return this._mem; },
+  async _localSet(arr){ this._mem=arr; if(window.storage){ try{ await window.storage.set('alpstay_bookings',JSON.stringify(arr),true); }catch(e){} } },
+  async create(b){ if(FB_ON){ await db.ref('bookings/'+b.id).set(b); return; } const arr=await this._localGet(); arr.push(b); await this._localSet(arr); },
+  async getOne(id){
+    if(FB_ON){ try{ const d=await db.ref('bookings/'+id).once('value'); let cond=''; try{ const s=await db.ref('settings/general/conditions').once('value'); cond=s.exists()?s.val():''; }catch(e){} return {booking:d.exists()?d.val():null, conditions:cond}; }catch(e){ return {booking:null,conditions:''}; } }
+    const arr=await this._localGet(); let cond='';
+    if(window.storage){ try{ const c=await window.storage.get('alpstay_conditions',true); cond=c?c.value:''; }catch(e){} }
+    return {booking:arr.find(x=>x.id===id)||null, conditions:cond};
+  },
+  async accept(id){
+    if(FB_ON){ await db.ref('bookings/'+id).update({stato:'confermata',acceptedAt:new Date().toISOString()}); return; }
+    const arr=await this._localGet(); const i=arr.findIndex(x=>x.id===id); if(i>=0){ arr[i].stato='confermata'; arr[i].acceptedAt=new Date().toISOString(); await this._localSet(arr); }
+  }
+};
+
+/* ---- EmailJS: invio email (un solo template generico) ---- */
+async function sendMail(to,cc,reply,subject,html){
+  if(!EJS_ON) return;
+  try{ await emailjs.send(CONFIG.EMAILJS.serviceId, CONFIG.EMAILJS.templateId,
+    { to_email:to, cc_email:cc||'', reply_to:reply||CONFIG.CC_EMAIL, subject, message_html:html }); }
+  catch(e){ console.error('EmailJS', e); }
+}
+function mailShell(title, intro, rows, extra){
+  const line='#E6DEC8', gold='#A68A63', ink='#2E2F2E', soft='#6B6660';
+  const body = rows.map(r=>`<tr><td style="padding:9px 14px;border-top:1px solid ${line};color:${soft};font-size:14px">${r[0]}</td><td style="padding:9px 14px;border-top:1px solid ${line};text-align:right;font-size:14px;color:${ink}${r[2]?';font-weight:bold':''}">${r[1]}</td></tr>`).join('');
+  return `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;border:1px solid ${line};border-radius:8px;overflow:hidden">
+    <div style="height:4px;background:${gold}"></div><div style="padding:24px">
+    <div style="font-size:12px;letter-spacing:.2em;color:${soft}">ALPSTAY</div>
+    <div style="font-size:20px;font-weight:bold;margin:2px 0 12px">${title}</div>
+    ${intro?`<p style="font-size:14px;line-height:1.6;color:${ink}">${intro}</p>`:''}
+    <table style="width:100%;border-collapse:collapse;border:1px solid ${line};border-radius:6px;overflow:hidden;margin:8px 0">${body}</table>
+    ${extra||''}
+    <div style="margin-top:16px;font-size:12px;color:#A79E8C">Alpstay · alpstay.eu</div></div></div>`;
+}
+function sendRequestEmail(b){
+  const oraLabel=b.riferimento==='arrivo'?'Arrivo a destinazione':'Partenza dal luogo di partenza';
+  const link=CONFIG.ADMIN_URL?CONFIG.ADMIN_URL+(CONFIG.ADMIN_URL.indexOf('?')>=0?'&':'?')+'id='+encodeURIComponent(b.id):'';
+  const rows=[['Codice',b.id],['Tipo',esc(b.tipo)],['Struttura',esc(b.struttura)||'—'],['Passeggero',esc(b.nome)+' '+esc(b.cognome)+' · '+esc(b.persone)+' pax'],['Contatti',(esc(b.email)||'')+(b.telefono?' · '+esc(b.telefono):'')],['Data',fmtDate(b.data)],[oraLabel,esc(b.ora),true],['Tragitto',esc(b.partenza)+' → '+esc(b.arrivo)],['Volo',esc(b.volo)||'—'],['Bagagli',esc(b.bagaglio)+' valigie · '+esc(b.sacche)+' sci']];
+  if(b.note) rows.push(['Note ospite',esc(b.note)]);
+  const extra=link?`<div style="margin:14px 0;padding:14px;background:#FAF6EC;border:1px solid #E6DEC8;border-radius:6px;text-align:center"><div style="font-size:13px;color:#6B6660;margin-bottom:10px">Riservato a Limousine Service Dolomiti</div><a href="${link}" style="display:inline-block;background:#A68A63;color:#fff;text-decoration:none;font-weight:bold;padding:12px 30px;border-radius:6px">Apri il modulo di risposta</a></div>`:'';
+  const html=mailShell('Nuova richiesta di transfer','', rows, extra);
+  const to=[CONFIG.TO_EMAIL, CONFIG.CC_EMAIL].filter(Boolean).join(',');
+  sendMail(to, '', b.email||CONFIG.CC_EMAIL, 'Richiesta transfer · '+b.nome+' '+b.cognome+' · '+fmtDate(b.data), html);
+}
+function sendConfirmedEmail(b){
+  const rows=[['Codice',b.id],['Orario di ritiro',(esc(b.orarioConfermato)||'—')+' · '+fmtDate(b.data),true],['Tragitto',esc(b.partenza)+' → '+esc(b.arrivo)],['Mezzo',esc(b.veicolo)||'—'],['Prezzo',eur(b.prezzo)]];
+  if(b.noteOspite) rows.push(['Note',esc(b.noteOspite)]);
+  const cond=(String(b.condizioniAttive||'').toLowerCase().indexOf('s')===0 && b._cond)?`<div style="margin-top:14px;border:1px solid #E6DEC8;border-radius:6px;padding:12px;background:#FCFAF5"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#A68A63;margin-bottom:6px">Condizioni generali</div><div style="font-size:12px;color:#6B6660;white-space:pre-wrap">${esc(b._cond)}</div></div>`:'';
+  const html=mailShell('Il tuo transfer è confermato','La tua accettazione è registrata: il servizio è confermato.', rows, cond);
+  // destinatari diretti: fornitore + Alpstay + ospite
+  const to=[CONFIG.TO_EMAIL, CONFIG.CC_EMAIL, b.email].filter(Boolean).join(',');
+  sendMail(to, '', CONFIG.TO_EMAIL, 'Confermato · transfer '+b.nome+' '+b.cognome, html);
+}
+
+const form=$('#transferForm'), submitBtn=$('#submitBtn'), successBox=$('#success');
+form.querySelectorAll('input,select,textarea').forEach(el=>el.addEventListener('input',()=>el.closest('.field').classList.remove('invalid')));
+function validate(){
+  let ok=true;
+  form.querySelectorAll('[required]').forEach(el=>{ let bad=!el.value.trim(); if(el.type==='number'&&el.value&&Number(el.value)<Number(el.min||0)) bad=true; el.closest('.field').classList.toggle('invalid',bad); if(bad) ok=false; });
+  const em=$('#email'); if(em.value&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em.value)){ em.closest('.field').classList.add('invalid'); ok=false; }
+  return ok;
+}
+function collect(){
+  const g=id=>$('#'+id).value.trim();
+  return { id:genId(), createdAt:new Date().toISOString(), stato:'inviata',
+    tipo:g('tipo'), struttura:g('struttura'), nome:g('nome'), cognome:g('cognome'), email:g('email'), telefono:g('telefono'),
+    data:g('data'), ora:g('ora'), riferimento:g('riferimento'), partenza:g('partenza'), arrivo:g('arrivo'), volo:g('volo'),
+    persone:g('persone'), bagaglio:g('bagaglio')||'0', sacche:g('sacche')||'0', note:g('note'),
+    prezzo:0, commissione:0, noteInterne:'', orarioConfermato:'', veicolo:'', noteFornitore:'', rispostaAt:'', pagamentoAnticipato:'', linkPagamento:'', acceptedAt:'', condizioniAttive:'', noteOspite:'' };
+}
+form.addEventListener('submit',async e=>{
+  e.preventDefault();
+  if(!validate()){ const f=form.querySelector('.invalid'); if(f) f.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  const b=collect();
+  submitBtn.disabled=true; submitBtn.textContent=t('js_sending');
+  try{ await Store.create(b); }
+  catch(err){ alert('Invio non riuscito. Riprova o scrivi a '+CONFIG.TO_EMAIL); submitBtn.disabled=false; submitBtn.textContent=t('btn_submit'); return; }
+  sendRequestEmail(b);
+  lastSuccess={id:b.id, real:FB_ON};
+  $('#successCode').textContent=t('js_succ_code')+b.id;
+  $('#successText').textContent = FB_ON ? t('js_succ_real') : t('js_succ_demo');
+  form.style.display='none'; successBox.classList.add('show'); successBox.scrollIntoView({behavior:'smooth',block:'center'});
+  submitBtn.disabled=false; submitBtn.textContent=t('btn_submit');
+});
+$('#againBtn').addEventListener('click',()=>{ form.reset(); $('#persone').value=1; $('#bagaglio').value=0; $('#sacche').value=0; form.style.display='block'; successBox.classList.remove('show'); window.scrollTo({top:0,behavior:'smooth'}); });
+
+/* ----- vista offerta / accettazione ----- */
+const offerId = new URLSearchParams(location.search).get('offer');
+function offerSummary(b, conditions){
+  return `
+    <div style="border:1px solid var(--field-border);border-radius:3px;overflow:hidden;margin:8px 0 18px">
+      <div style="display:flex;justify-content:space-between;padding:13px 16px;background:var(--gold-wash);color:#8a6d2f"><span>${t('s_ritiro')}</span><strong>${esc(b.orarioConfermato)||'—'} · ${fmtDate(b.data)}</strong></div>
+      <div style="display:flex;justify-content:space-between;padding:13px 16px;border-top:1px solid var(--field-border)"><span class="small">${t('s_tragitto')}</span><span>${esc(b.partenza)} → ${esc(b.arrivo)}</span></div>
+      ${b.volo?`<div style="display:flex;justify-content:space-between;padding:13px 16px;border-top:1px solid var(--field-border)"><span class="small">${t('s_volo')}</span><span>${esc(b.volo)}</span></div>`:''}
+      <div style="display:flex;justify-content:space-between;padding:13px 16px;border-top:1px solid var(--field-border)"><span class="small">${t('s_persone')}</span><span>${esc(b.persone)} · ${esc(b.bagaglio)} ${t('w_valigie')} · ${esc(b.sacche)} ${t('w_sci')}</span></div>
+      ${b.veicolo?`<div style="display:flex;justify-content:space-between;padding:13px 16px;border-top:1px solid var(--field-border)"><span class="small">${t('s_mezzo')}</span><span>${esc(b.veicolo)}</span></div>`:''}
+      <div style="display:flex;justify-content:space-between;padding:13px 16px;border-top:1px solid var(--field-border)"><span class="small">${t('s_prezzo')}</span><strong>${eur(b.prezzo)}</strong></div>
+    </div>
+    ${b.noteOspite?`<p style="font-size:14px;color:var(--ink-soft);margin:0 0 18px"><strong style="color:var(--ink)">${t('s_note')}:</strong> ${esc(b.noteOspite)}</p>`:''}
+    ${conditions?`<div class="panel" style="margin-bottom:18px"><div class="dl" style="color:var(--gold);margin-bottom:8px">${t('s_cond')}</div><div class="dv" style="white-space:pre-wrap;font-size:13px;color:var(--ink-soft)">${esc(conditions)}</div></div>`:''}`;
+}
+async function renderOffer(id){
+  const ov=$('#view-offerta'), fm=$('#view-form');
+  fm.style.display='none'; ov.style.display='block'; ov.classList.add('active');
+  $('#offerBox').innerHTML='<p class="lead" style="margin-top:40px">'+t('o_loading')+'</p>';
+  let {booking,conditions}=await Store.getOne(id);
+  if(!booking && !FB_ON){ booking={id,stato:'offerta',nome:'Anna',cognome:'Bianchi',data:'2026-06-02',riferimento:'arrivo',ora:'14:30',orarioConfermato:'13:45',partenza:'Aeroporto di Verona',arrivo:'Hotel Selva',volo:'FR1234',persone:'2',bagaglio:'2',sacche:'2',veicolo:'Mercedes Vito',prezzo:180,pagamentoAnticipato:'sì',linkPagamento:'https://pay.example.com/anna',condizioniAttive:'sì',noteOspite:'L\'autista vi attenderà all\'area arrivi con un cartello.'}; conditions=conditions||'Esempio di condizioni generali (modalità demo).'; }
+  if(!booking){ $('#offerBox').innerHTML='<h1 style="font-size:34px">'+t('o_notfound_t')+'</h1><p class="lead">'+t('o_notfound_p')+'</p>'; return; }
+  booking._cond=conditions;
+  const cond = (String(booking.condizioniAttive||'').toLowerCase().indexOf('s')===0)?conditions:'';
+  if(booking.stato==='confermata'){ renderConfirmed(booking); return; }
+  const paga=String(booking.pagamentoAnticipato||'').toLowerCase().indexOf('s')===0;
+  $('#offerBox').innerHTML=`
+    <h1>${t('o_title')}</h1>
+    <p class="lead">${t('o_lead')}</p>
+    <div class="rule" style="margin-bottom:30px"></div>
+    ${offerSummary(booking,cond)}
+    <div style="text-align:center">
+      <button class="submit" id="acceptBtn">${t('o_accept')}</button>
+      ${paga&&booking.linkPagamento?`<div style="margin-top:14px"><a class="ghost-btn" style="display:inline-block;text-decoration:none" href="${esc(booking.linkPagamento)}" target="_blank" rel="noopener">${t('o_pay')}${eur(booking.prezzo)}</a></div>`:''}
+      <p class="hint">${t('o_hint')}</p>
+    </div>`;
+  $('#acceptBtn').addEventListener('click',async()=>{
+    const btn=$('#acceptBtn'); btn.disabled=true; btn.textContent=t('o_confirming');
+    try{ await Store.accept(id); }catch(e){ btn.disabled=false; btn.textContent=t('o_accept'); alert(t('o_err')); return; }
+    booking.stato='confermata'; sendConfirmedEmail(booking); renderConfirmed(booking); window.scrollTo({top:0,behavior:'smooth'});
+  });
+}
+function renderConfirmed(b){
+  const paga=String(b.pagamentoAnticipato||'').toLowerCase().indexOf('s')===0;
+  $('#offerBox').innerHTML=`
+    <div class="success show" style="display:block">
+      <div class="check">&#10003;</div>
+      <h2>${t('c_title')}</h2>
+      <p>${t('c_text',{nome:esc(b.nome)})}</p>
+      <div style="max-width:420px;margin:18px auto 0;text-align:left">
+        <div style="display:flex;justify-content:space-between;padding:8px 0"><span class="small">${t('c_ritiro')}</span><strong>${esc(b.orarioConfermato)||'—'} · ${fmtDate(b.data)}</strong></div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--field-border)"><span class="small">${t('s_mezzo')}</span><span>${esc(b.veicolo)||'—'}</span></div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--field-border)"><span class="small">${t('c_prezzo')}</span><span>${eur(b.prezzo)}</span></div>
+      </div>
+      ${paga&&b.linkPagamento?`<div style="margin-top:18px"><a class="ghost-btn" style="display:inline-block;text-decoration:none" href="${esc(b.linkPagamento)}" target="_blank" rel="noopener">${t('c_pay')}${eur(b.prezzo)}</a></div>`:''}
+      <p class="hint" style="margin-top:18px">${t('c_code',{id:esc(b.id)})}</p>
+    </div>`;
+}
+
+(function initLang(){ const u=new URLSearchParams(location.search).get('lang'); const n=(navigator.language||'it').slice(0,2).toLowerCase(); setLang(I18N[u]?u:(I18N[n]?n:'it')); })();
+$('#modeFlag').textContent = FB_ON ? 'Sistema attivo · Realtime Database + EmailJS' : 'Modalità demo · configura Firebase ed EmailJS per la versione reale';
+if(offerId) renderOffer(offerId);
+</script>
+</body>
+</html>
