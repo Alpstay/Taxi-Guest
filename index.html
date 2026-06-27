@@ -268,6 +268,7 @@
 const CONFIG = {
   FIREBASE: { apiKey:'AIzaSyD3j-k47EqEZ-RyNgO_h1JpA1_mgis2Zb4', authDomain:'taxi-6c9f5.firebaseapp.com', databaseURL:'https://taxi-6c9f5-default-rtdb.europe-west1.firebasedatabase.app', projectId:'taxi-6c9f5', appId:'1:705863760679:web:aaa204dac556189c3a0702' },
   EMAILJS:  { publicKey:'65-IyBQx_A0DUK8-N', serviceId:'service_2ovf6na', templateId:'template_w4b5v7d' },
+  MAIL_ENDPOINT:'https://script.google.com/macros/s/AKfycbz6y4YnftxcWp3v_uZcbB1dcXP2saFZYTJMErkB7_756quurtq4kfIE4x1yuP-ZLT3JNA/exec',  // web-app Google Apps Script
   TO_EMAIL:'info@limousinedolomiti.com', CC_EMAIL:'info@alpstay.eu',
   ADMIN_URL:'https://alpstay.github.io/Taxi-Admin/',   // pagina admin (link al fornitore nelle email)
   GUEST_URL:''    // URL pubblico di questa pagina (per il link "accetto" — di solito non serve qui)
@@ -466,10 +467,12 @@ const Store = {
 
 /* ---- EmailJS: invio email (un solo template generico) ---- */
 async function sendMail(to,cc,reply,subject,html){
-  if(!EJS_ON) return;
-  try{ await emailjs.send(CONFIG.EMAILJS.serviceId, CONFIG.EMAILJS.templateId,
-    { to_email:to, cc_email:cc||'', reply_to:reply||CONFIG.CC_EMAIL, subject, message_html:html }); }
-  catch(e){ console.error('EmailJS', e); }
+  if(!CONFIG.MAIL_ENDPOINT) return;
+  try{
+    await fetch(CONFIG.MAIL_ENDPOINT,{ method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({ to:to, cc:cc||'', replyTo:reply||CONFIG.CC_EMAIL, subject:subject, html:html }) });
+  }catch(e){ console.error('Mail', e); }
 }
 function mailShell(title, intro, rows, extra){
   const line='#E6DEC8', gold='#A68A63', ink='#2E2F2E', soft='#6B6660';
