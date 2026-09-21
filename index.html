@@ -156,7 +156,6 @@
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>.langbar{display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap;margin:14px 0 -10px}.langbtn{background:none;border:1px solid var(--field-border);color:var(--muted);border-radius:3px;padding:5px 10px;font-size:12px;font-family:inherit;letter-spacing:.04em;cursor:pointer}.langbtn:hover{border-color:var(--gold-soft);color:var(--ink-soft)}.langbtn.active{border-color:var(--gold);color:var(--gold)}</style>
 </head>
 <body>
@@ -262,22 +261,19 @@
 </div>
 
 <script>
-/* === Pagina OSPITE — Realtime Database (dati) + EmailJS (email). ===
-   Incolla la config Firebase e i dati EmailJS qui sotto.
+/* === Pagina OSPITE — Realtime Database (dati) + Google Apps Script (email). ===
+   Incolla la config Firebase e l'URL dello script email (MAIL_ENDPOINT) qui sotto.
    Finché restano vuoti, la pagina funziona in modalità DEMO (dati locali). */
 const CONFIG = {
   FIREBASE: { apiKey:'AIzaSyD3j-k47EqEZ-RyNgO_h1JpA1_mgis2Zb4', authDomain:'taxi-6c9f5.firebaseapp.com', databaseURL:'https://taxi-6c9f5-default-rtdb.europe-west1.firebasedatabase.app', projectId:'taxi-6c9f5', appId:'1:705863760679:web:aaa204dac556189c3a0702' },
-  EMAILJS:  { publicKey:'65-IyBQx_A0DUK8-N', serviceId:'service_2ovf6na', templateId:'template_w4b5v7d' },
   MAIL_ENDPOINT:'https://script.google.com/macros/s/AKfycbz6y4YnftxcWp3v_uZcbB1dcXP2saFZYTJMErkB7_756quurtq4kfIE4x1yuP-ZLT3JNA/exec',  // web-app Google Apps Script
   TO_EMAIL:'info@limousinedolomiti.com', CC_EMAIL:'info@alpstay.eu',
   ADMIN_URL:'https://alpstay.github.io/Taxi-Admin/',   // pagina admin (link al fornitore nelle email)
   GUEST_URL:''    // URL pubblico di questa pagina (per il link "accetto" — di solito non serve qui)
 };
 const FB_ON  = !!CONFIG.FIREBASE.projectId && typeof firebase!=='undefined';
-const EJS_ON = !!CONFIG.EMAILJS.publicKey && typeof emailjs!=='undefined';
 let db=null;
 if(FB_ON){ firebase.initializeApp(CONFIG.FIREBASE); db=firebase.database(); }
-if(EJS_ON){ emailjs.init({publicKey:CONFIG.EMAILJS.publicKey}); }
 
 const $ = s => document.querySelector(s);
 const esc = s => (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -310,7 +306,7 @@ const I18N={
   foot_label:"Fornitore ufficiale del servizio", foot_note:"Servizio transfer riservato agli ospiti delle strutture Alpstay · alpstay.eu",
   js_sending:"Invio in corso…", js_succ_code:"Codice richiesta · ",
   js_succ_real:"La richiesta è stata inviata a Limousine Service Dolomiti, con copia ad Alpstay. Verrà confermata a breve.",
-  js_succ_demo:"Richiesta registrata in modalità demo. Configura Firebase/EmailJS per l'invio reale.",
+  js_succ_demo:"Richiesta registrata in modalità demo. Configura Firebase per l'invio reale.",
   o_loading:"Caricamento offerta…", o_title:"La tua offerta", o_lead:"Limousine Service Dolomiti è disponibile per il tuo transfer. Accetta per confermare il servizio.",
   s_ritiro:"Orario di ritiro", s_tragitto:"Tragitto", s_volo:"Volo", s_persone:"Persone", w_valigie:"valigie", w_sci:"sci", s_mezzo:"Mezzo", s_prezzo:"Prezzo del servizio", s_note:"Note", s_cond:"Condizioni generali",
   o_accept:"Accetto l'offerta", o_confirming:"Conferma in corso…", o_pay:"Paga ora · ", o_hint:"Accettando, il servizio risulterà confermato e Limousine Service Dolomiti verrà avvisata.",
@@ -338,7 +334,7 @@ const I18N={
   foot_label:"Offizieller Anbieter des Services", foot_note:"Transferservice für Gäste der Alpstay-Unterkünfte · alpstay.eu",
   js_sending:"Wird gesendet…", js_succ_code:"Anfragecode · ",
   js_succ_real:"Ihre Anfrage wurde an Limousine Service Dolomiti gesendet, in Kopie an Alpstay. Sie wird in Kürze bestätigt.",
-  js_succ_demo:"Anfrage im Demo-Modus gespeichert. Konfigurieren Sie Firebase/EmailJS für den echten Versand.",
+  js_succ_demo:"Anfrage im Demo-Modus gespeichert. Konfigurieren Sie Firebase für den echten Versand.",
   o_loading:"Angebot wird geladen…", o_title:"Ihr Angebot", o_lead:"Limousine Service Dolomiti steht für Ihren Transfer zur Verfügung. Akzeptieren Sie, um den Service zu bestätigen.",
   s_ritiro:"Abholzeit", s_tragitto:"Strecke", s_volo:"Flug", s_persone:"Personen", w_valigie:"Koffer", w_sci:"Ski", s_mezzo:"Fahrzeug", s_prezzo:"Preis des Service", s_note:"Anmerkungen", s_cond:"Allgemeine Bedingungen",
   o_accept:"Angebot annehmen", o_confirming:"Wird bestätigt…", o_pay:"Jetzt bezahlen · ", o_hint:"Mit der Annahme gilt der Service als bestätigt und Limousine Service Dolomiti wird benachrichtigt.",
@@ -366,7 +362,7 @@ const I18N={
   foot_label:"Official service provider", foot_note:"Transfer service reserved for guests of Alpstay properties · alpstay.eu",
   js_sending:"Sending…", js_succ_code:"Request code · ",
   js_succ_real:"Your request has been sent to Limousine Service Dolomiti, with a copy to Alpstay. It will be confirmed shortly.",
-  js_succ_demo:"Request saved in demo mode. Configure Firebase/EmailJS for real sending.",
+  js_succ_demo:"Request saved in demo mode. Configure Firebase for real sending.",
   o_loading:"Loading offer…", o_title:"Your offer", o_lead:"Limousine Service Dolomiti is available for your transfer. Accept to confirm the service.",
   s_ritiro:"Pick-up time", s_tragitto:"Route", s_volo:"Flight", s_persone:"People", w_valigie:"suitcases", w_sci:"ski", s_mezzo:"Vehicle", s_prezzo:"Service price", s_note:"Notes", s_cond:"General conditions",
   o_accept:"Accept the offer", o_confirming:"Confirming…", o_pay:"Pay now · ", o_hint:"By accepting, the service will be confirmed and Limousine Service Dolomiti will be notified.",
@@ -394,7 +390,7 @@ const I18N={
   foot_label:"官方服务提供商", foot_note:"本接送服务仅限 Alpstay 住宿的客人 · alpstay.eu",
   js_sending:"提交中…", js_succ_code:"申请编号 · ",
   js_succ_real:"您的申请已发送至 Limousine Service Dolomiti，并抄送 Alpstay，稍后将予以确认。",
-  js_succ_demo:"已在演示模式下保存申请。请配置 Firebase/EmailJS 以实际发送。",
+  js_succ_demo:"已在演示模式下保存申请。请配置 Firebase 以实际发送。",
   o_loading:"正在加载报价…", o_title:"您的报价", o_lead:"Limousine Service Dolomiti 可为您提供接送服务。点击接受以确认服务。",
   s_ritiro:"接载时间", s_tragitto:"行程", s_volo:"航班", s_persone:"人数", w_valigie:"件行李", w_sci:"滑雪包", s_mezzo:"车辆", s_prezzo:"服务价格", s_note:"备注", s_cond:"一般条款",
   o_accept:"接受报价", o_confirming:"确认中…", o_pay:"立即支付 · ", o_hint:"接受后，服务即视为确认，并会通知 Limousine Service Dolomiti。",
@@ -422,7 +418,7 @@ const I18N={
   foot_label:"공식 서비스 제공업체", foot_note:"Alpstay 숙소 고객 전용 트랜스퍼 서비스 · alpstay.eu",
   js_sending:"전송 중…", js_succ_code:"요청 코드 · ",
   js_succ_real:"요청이 Limousine Service Dolomiti로 전송되었으며 Alpstay에 사본이 전달되었습니다. 곧 확정됩니다.",
-  js_succ_demo:"데모 모드로 요청이 저장되었습니다. 실제 전송하려면 Firebase/EmailJS를 설정하세요.",
+  js_succ_demo:"데모 모드로 요청이 저장되었습니다. 실제 전송하려면 Firebase를 설정하세요.",
   o_loading:"제안을 불러오는 중…", o_title:"제안 내용", o_lead:"Limousine Service Dolomiti가 트랜스퍼를 제공할 수 있습니다. 수락하면 서비스가 확정됩니다.",
   s_ritiro:"픽업 시간", s_tragitto:"경로", s_volo:"항공편", s_persone:"인원", w_valigie:"수하물", w_sci:"스키", s_mezzo:"차량", s_prezzo:"서비스 요금", s_note:"메모", s_cond:"일반 약관",
   o_accept:"제안 수락", o_confirming:"확인 중…", o_pay:"지금 결제 · ", o_hint:"수락하면 서비스가 확정되고 Limousine Service Dolomiti에 통보됩니다.",
@@ -465,14 +461,20 @@ const Store = {
   }
 };
 
-/* ---- EmailJS: invio email (un solo template generico) ---- */
+/* ---- Email: invio tramite Google Apps Script ---- */
 async function sendMail(to,cc,reply,subject,html){
-  if(!CONFIG.MAIL_ENDPOINT) return;
+  if(!CONFIG.MAIL_ENDPOINT) return false;
+  let esito=null;
   try{
-    await fetch(CONFIG.MAIL_ENDPOINT,{ method:'POST', mode:'no-cors',
-      headers:{'Content-Type':'text/plain;charset=utf-8'},
+    const r=await fetch(CONFIG.MAIL_ENDPOINT,{ method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},   // richiesta semplice: nessun preflight CORS
       body: JSON.stringify({ to:to, cc:cc||'', replyTo:reply||CONFIG.CC_EMAIL, subject:subject, html:html }) });
-  }catch(e){ console.error('Mail', e); }
+    esito=await r.json().catch(()=>null);
+  }catch(e){ console.error('[Mail] script non raggiungibile:', e); }
+  if(esito && esito.ok){ console.info('[Mail] inviata a '+to+' · '+subject); return true; }
+  console.error('[Mail] NON inviata a '+to+' · risposta script:', esito);
+  // (lato ospite nessun avviso a schermo: la prenotazione è comunque salvata)
+  return false;
 }
 function mailShell(title, intro, rows, extra){
   const line='#E6DEC8', gold='#A68A63', ink='#2E2F2E', soft='#6B6660';
@@ -598,7 +600,7 @@ function renderConfirmed(b){
 }
 
 (function initLang(){ const u=new URLSearchParams(location.search).get('lang'); const n=(navigator.language||'it').slice(0,2).toLowerCase(); setLang(I18N[u]?u:(I18N[n]?n:'it')); })();
-$('#modeFlag').textContent = FB_ON ? 'Sistema attivo · Realtime Database + EmailJS' : 'Modalità demo · configura Firebase ed EmailJS per la versione reale';
+$('#modeFlag').textContent = FB_ON ? 'Sistema attivo · Realtime Database + email Google' : 'Modalità demo · configura Firebase per la versione reale';
 if(offerId) renderOffer(offerId);
 </script>
 </body>
