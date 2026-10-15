@@ -49,6 +49,10 @@
   input,select,textarea{font-family:'Lato',sans-serif;font-weight:300;font-size:16px;color:var(--ink);background:var(--field-bg);border:1px solid var(--field-border);border-radius:2px;padding:13px 14px;width:100%;transition:border-color .25s,box-shadow .25s,background .25s;appearance:none}
   textarea{resize:vertical;min-height:92px;line-height:1.55}
   select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%23B6924E' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");background-repeat:no-repeat;background-position:right 16px center;padding-right:38px;cursor:pointer}
+  /* le caselle di spunta devono restare visibili: la regola generale sopra applica
+     appearance:none anche a loro e il segno di spunta non comparirebbe mai */
+  input[type="checkbox"]{appearance:auto;-webkit-appearance:checkbox;width:20px;height:20px;min-width:20px;flex:none;padding:0;margin:0;border:none;background:none;border-radius:0;accent-color:var(--gold);cursor:pointer}
+  input[type="checkbox"]:focus{outline:2px solid var(--gold);outline-offset:2px;box-shadow:none}
   input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);background:#fff;box-shadow:0 0 0 3px rgba(182,146,78,.12)}
   input::placeholder,textarea::placeholder{color:#B6AE9C}
   .field.invalid input,.field.invalid select,.field.invalid textarea{border-color:var(--err);box-shadow:0 0 0 3px rgba(166,64,58,.10)}
@@ -309,7 +313,7 @@ const I18N={
   js_succ_demo:"Richiesta registrata in modalità demo. Configura Firebase per l'invio reale.",
   o_loading:"Caricamento offerta…", o_title:"La tua offerta", o_lead:"Limousine Service Dolomiti è disponibile per il tuo transfer. Accetta per confermare il servizio.",
   s_ritiro:"Orario di ritiro", s_tragitto:"Tragitto", s_volo:"Volo", s_persone:"Persone", w_valigie:"valigie", w_sci:"sci", s_mezzo:"Mezzo", s_prezzo:"Prezzo del servizio", s_note:"Note", s_cond:"Condizioni generali",
-  o_accept:"Accetto l'offerta", o_confirming:"Conferma in corso…", o_pay:"Paga ora · ", o_hint:"Accettando, il servizio risulterà confermato e Limousine Service Dolomiti verrà avvisata.",
+  o_accept:"Confermo il prezzo di ", o_confirming:"Conferma in corso…", o_pay:"Paga ora · ", o_hint:"Accettando, il servizio risulterà confermato e Limousine Service Dolomiti verrà avvisata.",
   o_notfound_t:"Offerta non trovata", o_notfound_p:"Controlla il link ricevuto via email o contatta la struttura.", o_err:"Operazione non riuscita, riprova.",
   c_title:"Servizio confermato", c_text:"Grazie {nome}, la tua accettazione è registrata. Limousine Service Dolomiti ti attenderà come da dettagli.",
   c_ritiro:"Ritiro", c_prezzo:"Prezzo", c_pay:"Completa il pagamento · ", c_code:"Codice {id} · per assistenza +39 335 6345264"
@@ -337,7 +341,7 @@ const I18N={
   js_succ_demo:"Anfrage im Demo-Modus gespeichert. Konfigurieren Sie Firebase für den echten Versand.",
   o_loading:"Angebot wird geladen…", o_title:"Ihr Angebot", o_lead:"Limousine Service Dolomiti steht für Ihren Transfer zur Verfügung. Akzeptieren Sie, um den Service zu bestätigen.",
   s_ritiro:"Abholzeit", s_tragitto:"Strecke", s_volo:"Flug", s_persone:"Personen", w_valigie:"Koffer", w_sci:"Ski", s_mezzo:"Fahrzeug", s_prezzo:"Preis des Service", s_note:"Anmerkungen", s_cond:"Allgemeine Bedingungen",
-  o_accept:"Angebot annehmen", o_confirming:"Wird bestätigt…", o_pay:"Jetzt bezahlen · ", o_hint:"Mit der Annahme gilt der Service als bestätigt und Limousine Service Dolomiti wird benachrichtigt.",
+  o_accept:"Ich bestätige den Preis von ", o_confirming:"Wird bestätigt…", o_pay:"Jetzt bezahlen · ", o_hint:"Mit der Annahme gilt der Service als bestätigt und Limousine Service Dolomiti wird benachrichtigt.",
   o_notfound_t:"Angebot nicht gefunden", o_notfound_p:"Bitte prüfen Sie den per E-Mail erhaltenen Link oder kontaktieren Sie die Unterkunft.", o_err:"Vorgang fehlgeschlagen, bitte erneut versuchen.",
   c_title:"Service bestätigt", c_text:"Danke {nome}, Ihre Annahme ist registriert. Limousine Service Dolomiti erwartet Sie wie angegeben.",
   c_ritiro:"Abholung", c_prezzo:"Preis", c_pay:"Zahlung abschließen · ", c_code:"Code {id} · für Unterstützung +39 335 6345264"
@@ -365,7 +369,7 @@ const I18N={
   js_succ_demo:"Request saved in demo mode. Configure Firebase for real sending.",
   o_loading:"Loading offer…", o_title:"Your offer", o_lead:"Limousine Service Dolomiti is available for your transfer. Accept to confirm the service.",
   s_ritiro:"Pick-up time", s_tragitto:"Route", s_volo:"Flight", s_persone:"People", w_valigie:"suitcases", w_sci:"ski", s_mezzo:"Vehicle", s_prezzo:"Service price", s_note:"Notes", s_cond:"General conditions",
-  o_accept:"Accept the offer", o_confirming:"Confirming…", o_pay:"Pay now · ", o_hint:"By accepting, the service will be confirmed and Limousine Service Dolomiti will be notified.",
+  o_accept:"I confirm the price of ", o_confirming:"Confirming…", o_pay:"Pay now · ", o_hint:"By accepting, the service will be confirmed and Limousine Service Dolomiti will be notified.",
   o_notfound_t:"Offer not found", o_notfound_p:"Please check the link you received by email or contact the property.", o_err:"Operation failed, please try again.",
   c_title:"Service confirmed", c_text:"Thank you {nome}, your acceptance is recorded. Limousine Service Dolomiti will be waiting for you as detailed.",
   c_ritiro:"Pick-up", c_prezzo:"Price", c_pay:"Complete payment · ", c_code:"Code {id} · for assistance +39 335 6345264"
@@ -393,7 +397,7 @@ const I18N={
   js_succ_demo:"已在演示模式下保存申请。请配置 Firebase 以实际发送。",
   o_loading:"正在加载报价…", o_title:"您的报价", o_lead:"Limousine Service Dolomiti 可为您提供接送服务。点击接受以确认服务。",
   s_ritiro:"接载时间", s_tragitto:"行程", s_volo:"航班", s_persone:"人数", w_valigie:"件行李", w_sci:"滑雪包", s_mezzo:"车辆", s_prezzo:"服务价格", s_note:"备注", s_cond:"一般条款",
-  o_accept:"接受报价", o_confirming:"确认中…", o_pay:"立即支付 · ", o_hint:"接受后，服务即视为确认，并会通知 Limousine Service Dolomiti。",
+  o_accept:"我确认价格 ", o_confirming:"确认中…", o_pay:"立即支付 · ", o_hint:"接受后，服务即视为确认，并会通知 Limousine Service Dolomiti。",
   o_notfound_t:"未找到报价", o_notfound_p:"请检查您通过邮件收到的链接，或联系住宿方。", o_err:"操作失败，请重试。",
   c_title:"服务已确认", c_text:"谢谢您，{nome}，您的接受已记录。Limousine Service Dolomiti 将按所示详情等候您。",
   c_ritiro:"接载", c_prezzo:"价格", c_pay:"完成支付 · ", c_code:"编号 {id} · 如需协助 +39 335 6345264"
@@ -421,7 +425,7 @@ const I18N={
   js_succ_demo:"데모 모드로 요청이 저장되었습니다. 실제 전송하려면 Firebase를 설정하세요.",
   o_loading:"제안을 불러오는 중…", o_title:"제안 내용", o_lead:"Limousine Service Dolomiti가 트랜스퍼를 제공할 수 있습니다. 수락하면 서비스가 확정됩니다.",
   s_ritiro:"픽업 시간", s_tragitto:"경로", s_volo:"항공편", s_persone:"인원", w_valigie:"수하물", w_sci:"스키", s_mezzo:"차량", s_prezzo:"서비스 요금", s_note:"메모", s_cond:"일반 약관",
-  o_accept:"제안 수락", o_confirming:"확인 중…", o_pay:"지금 결제 · ", o_hint:"수락하면 서비스가 확정되고 Limousine Service Dolomiti에 통보됩니다.",
+  o_accept:"요금 확인: ", o_confirming:"확인 중…", o_pay:"지금 결제 · ", o_hint:"수락하면 서비스가 확정되고 Limousine Service Dolomiti에 통보됩니다.",
   o_notfound_t:"제안을 찾을 수 없습니다", o_notfound_p:"이메일로 받은 링크를 확인하거나 숙소에 문의하세요.", o_err:"처리에 실패했습니다. 다시 시도하세요.",
   c_title:"서비스 확정됨", c_text:"{nome}님, 수락이 기록되었습니다. Limousine Service Dolomiti가 안내된 내용대로 기다립니다.",
   c_ritiro:"픽업", c_prezzo:"요금", c_pay:"결제 완료 · ", c_code:"코드 {id} · 문의 +39 335 6345264"
@@ -455,9 +459,11 @@ const Store = {
     if(window.storage){ try{ const c=await window.storage.get('alpstay_conditions',true); cond=c?c.value:''; }catch(e){} }
     return {booking:arr.find(x=>x.id===id)||null, conditions:cond};
   },
-  async accept(id){
-    if(FB_ON){ await db.ref('bookings/'+id).update({stato:'confermata',acceptedAt:new Date().toISOString()}); return; }
-    const arr=await this._localGet(); const i=arr.findIndex(x=>x.id===id); if(i>=0){ arr[i].stato='confermata'; arr[i].acceptedAt=new Date().toISOString(); await this._localSet(arr); }
+  async accept(id,prezzoAccettato){
+    const patch={ stato:'confermata', acceptedAt:new Date().toISOString(),
+                  prezzoAccettato:Number(prezzoAccettato)||0, confermaVista:'' };
+    if(FB_ON){ await db.ref('bookings/'+id).update(patch); return; }
+    const arr=await this._localGet(); const i=arr.findIndex(x=>x.id===id); if(i>=0){ Object.assign(arr[i],patch); await this._localSet(arr); }
   }
 };
 
@@ -499,7 +505,7 @@ function sendRequestEmail(b){
   sendMail(to, '', b.email||CONFIG.CC_EMAIL, 'Richiesta transfer · '+b.nome+' '+b.cognome+' · '+fmtDate(b.data), html);
 }
 function sendConfirmedEmail(b){
-  const rows=[['Codice',b.id],['Orario di ritiro',(esc(b.orarioConfermato)||'—')+' · '+fmtDate(b.data),true],['Tragitto',esc(b.partenza)+' → '+esc(b.arrivo)],['Mezzo',esc(b.veicolo)||'—'],['Prezzo',eur(b.prezzo)]];
+  const rows=[['Codice',b.id],['Orario di ritiro',(esc(b.orarioConfermato)||'—')+' · '+fmtDate(b.data),true],['Tragitto',esc(b.partenza)+' → '+esc(b.arrivo)],['Mezzo',esc(b.veicolo)||'—'],['Prezzo accettato',eur(b.prezzoAccettato||b.prezzo),true]];
   if(b.noteOspite) rows.push(['Note',esc(b.noteOspite)]);
   const cond=(String(b.condizioniAttive||'').toLowerCase().indexOf('s')===0 && b._cond)?`<div style="margin-top:14px;border:1px solid #E6DEC8;border-radius:6px;padding:12px;background:#FCFAF5"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#A68A63;margin-bottom:6px">Condizioni generali</div><div style="font-size:12px;color:#6B6660;white-space:pre-wrap">${esc(b._cond)}</div></div>`:'';
   const html=mailShell('Il tuo transfer è confermato','La tua accettazione è registrata: il servizio è confermato.', rows, cond);
@@ -522,7 +528,7 @@ function collect(){
     tipo:g('tipo'), struttura:g('struttura'), nome:g('nome'), cognome:g('cognome'), email:g('email'), telefono:g('telefono'),
     data:g('data'), ora:g('ora'), riferimento:g('riferimento'), partenza:g('partenza'), arrivo:g('arrivo'), volo:g('volo'),
     persone:g('persone'), bagaglio:g('bagaglio')||'0', sacche:g('sacche')||'0', note:g('note'),
-    prezzo:0, commissione:0, noteInterne:'', orarioConfermato:'', veicolo:'', noteFornitore:'', rispostaAt:'', pagamentoAnticipato:'', linkPagamento:'', acceptedAt:'', condizioniAttive:'', noteOspite:'' };
+    prezzo:0, noteInterne:'', orarioConfermato:'', veicolo:'', noteFornitore:'', rispostaAt:'', pagamentoAnticipato:'', linkPagamento:'', acceptedAt:'', condizioniAttive:'', noteOspite:'' };
 }
 form.addEventListener('submit',async e=>{
   e.preventDefault();
@@ -572,14 +578,17 @@ async function renderOffer(id){
     <div class="rule" style="margin-bottom:30px"></div>
     ${offerSummary(booking,cond)}
     <div style="text-align:center">
-      <button class="submit" id="acceptBtn">${t('o_accept')}</button>
+      <button class="submit" id="acceptBtn">${t('o_accept')}${eur(booking.prezzo)}</button>
       ${paga&&booking.linkPagamento?`<div style="margin-top:14px"><a class="ghost-btn" style="display:inline-block;text-decoration:none" href="${esc(booking.linkPagamento)}" target="_blank" rel="noopener">${t('o_pay')}${eur(booking.prezzo)}</a></div>`:''}
       <p class="hint">${t('o_hint')}</p>
     </div>`;
   $('#acceptBtn').addEventListener('click',async()=>{
-    const btn=$('#acceptBtn'); btn.disabled=true; btn.textContent=t('o_confirming');
-    try{ await Store.accept(id); }catch(e){ btn.disabled=false; btn.textContent=t('o_accept'); alert(t('o_err')); return; }
-    booking.stato='confermata'; sendConfirmedEmail(booking); renderConfirmed(booking); window.scrollTo({top:0,behavior:'smooth'});
+    const btn=$('#acceptBtn'), etichetta=t('o_accept')+eur(booking.prezzo);
+    btn.disabled=true; btn.textContent=t('o_confirming');
+    const prezzoAccettato=Number(booking.prezzo)||0;
+    try{ await Store.accept(id,prezzoAccettato); }catch(e){ btn.disabled=false; btn.textContent=etichetta; alert(t('o_err')); return; }
+    booking.stato='confermata'; booking.prezzoAccettato=prezzoAccettato;
+    sendConfirmedEmail(booking); renderConfirmed(booking); window.scrollTo({top:0,behavior:'smooth'});
   });
 }
 function renderConfirmed(b){
