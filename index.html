@@ -240,6 +240,10 @@
         </div>
 
         <div class="submit-row">
+          <label for="condOk" id="condBox" style="display:flex;align-items:flex-start;gap:11px;max-width:620px;margin:0 auto 20px;padding:15px 18px;border:1px solid var(--gold);border-radius:3px;background:var(--gold-wash);cursor:pointer;text-align:left">
+            <input type="checkbox" id="condOk" style="margin-top:2px">
+            <span style="font-size:14px;line-height:1.55;color:var(--ink)" data-i18n="cond_check">Accetto le condizioni di cancellazione: gratuita fino a 6 giorni prima del servizio; dal 5º giorno in poi è dovuto il 50% dell'importo totale.</span>
+          </label>
           <button type="submit" class="submit" id="submitBtn" data-i18n="btn_submit">Invia richiesta</button>
           <p class="hint" data-i18n="submit_hint">La richiesta sarà inviata a info@limousinedolomiti.com · in copia a info@alpstay.eu</p>
         </div>
@@ -306,14 +310,14 @@ const I18N={
   opt_rif_par:"Orario di PARTENZA — dal luogo di partenza", opt_rif_arr:"Orario di ARRIVO — a destinazione",
   hint_rif:"Indica se l'orario è quello in cui si parte dal luogo di ritiro oppure quello in cui si deve arrivare a destinazione.",
   err_req:"Campo obbligatorio", err_email:"Email non valida", err_sel:"Seleziona un'opzione", err_struct:"Seleziona una struttura", err_num:"Inserisci un valore",
-  btn_submit:"Invia richiesta", submit_hint:"La richiesta sarà inviata a info@limousinedolomiti.com · in copia a info@alpstay.eu",
+  cond_check:"Accetto le condizioni di cancellazione: gratuita fino a 6 giorni prima del servizio; dal 5º giorno in poi è dovuto il 50% dell\'importo totale.", cond_wait:"Accetta le condizioni di cancellazione per inviare la richiesta", btn_submit:"Invia richiesta", submit_hint:"La richiesta sarà inviata a info@limousinedolomiti.com · in copia a info@alpstay.eu",
   foot_label:"Fornitore ufficiale del servizio", foot_note:"Servizio transfer riservato agli ospiti delle strutture Alpstay · alpstay.eu",
   js_sending:"Invio in corso…", js_succ_code:"Codice richiesta · ",
   js_succ_real:"La richiesta è stata inviata a Limousine Service Dolomiti, con copia ad Alpstay. Verrà confermata a breve.",
   js_succ_demo:"Richiesta registrata in modalità demo. Configura Firebase per l'invio reale.",
   o_loading:"Caricamento offerta…", o_title:"La tua offerta", o_lead:"Limousine Service Dolomiti è disponibile per il tuo transfer. Accetta per confermare il servizio.",
   s_ritiro:"Orario di ritiro", s_tragitto:"Tragitto", s_volo:"Volo", s_persone:"Persone", w_valigie:"valigie", w_sci:"sci", s_mezzo:"Mezzo", s_prezzo:"Prezzo del servizio", s_note:"Note", s_cond:"Condizioni generali",
-  o_accept:"Confermo con obbligo di pagare · ", o_terms:"Ho letto e accetto le condizioni generali, comprese le penali per mancata presentazione.", o_termswait:"Accetta le condizioni per proseguire", o_confirming:"Conferma in corso…", o_pay:"Paga ora · ", o_hint:"Accettando, il servizio risulterà confermato e Limousine Service Dolomiti verrà avvisata.",
+  o_reject:"Non confermo la prenotazione", o_reject_q:"Vuoi comunicare che il prezzo non va bene? La prenotazione non sarà confermata e Alpstay ti ricontatterà.", o_reject_t:"Risposta registrata", o_reject_p:"Abbiamo registrato che il prezzo non è stato accettato. La prenotazione non è confermata: Alpstay ti ricontatterà al più presto.", o_accept:"Confermo con obbligo di pagare · ", o_terms:"Ho letto e accetto le condizioni generali: cancellazione, attese e penali per mancata presentazione.", o_termswait:"Accetta le condizioni per proseguire", o_confirming:"Conferma in corso…", o_pay:"Paga ora · ", o_hint:"Accettando, il servizio risulterà confermato e Limousine Service Dolomiti verrà avvisata.",
   o_notfound_t:"Offerta non trovata", o_notfound_p:"Controlla il link ricevuto via email o contatta la struttura.", o_err:"Operazione non riuscita, riprova.",
   c_title:"Servizio confermato", c_text:"Grazie {nome}, la tua accettazione è registrata. Limousine Service Dolomiti ti attenderà come da dettagli.",
   c_ritiro:"Ritiro", c_prezzo:"Prezzo", c_pay:"Completa il pagamento · ", c_code:"Codice {id} · per assistenza +39 335 6345264"
@@ -334,14 +338,14 @@ const I18N={
   opt_rif_par:"ABFAHRTSzeit — vom Abholort", opt_rif_arr:"ANKUNFTSzeit — am Zielort",
   hint_rif:"Geben Sie an, ob die Uhrzeit die Abfahrt vom Abholort oder die gewünschte Ankunft am Zielort ist.",
   err_req:"Pflichtfeld", err_email:"Ungültige E-Mail", err_sel:"Bitte auswählen", err_struct:"Unterkunft auswählen", err_num:"Wert eingeben",
-  btn_submit:"Anfrage senden", submit_hint:"Die Anfrage wird an info@limousinedolomiti.com gesendet · in Kopie an info@alpstay.eu",
+  cond_check:"Ich akzeptiere die Stornobedingungen: kostenlos bis 6 Tage vor dem Service; ab dem 5. Tag sind 50% des Gesamtbetrags fällig.", cond_wait:"Bitte akzeptieren Sie die Stornobedingungen", btn_submit:"Anfrage senden", submit_hint:"Die Anfrage wird an info@limousinedolomiti.com gesendet · in Kopie an info@alpstay.eu",
   foot_label:"Offizieller Anbieter des Services", foot_note:"Transferservice für Gäste der Alpstay-Unterkünfte · alpstay.eu",
   js_sending:"Wird gesendet…", js_succ_code:"Anfragecode · ",
   js_succ_real:"Ihre Anfrage wurde an Limousine Service Dolomiti gesendet, in Kopie an Alpstay. Sie wird in Kürze bestätigt.",
   js_succ_demo:"Anfrage im Demo-Modus gespeichert. Konfigurieren Sie Firebase für den echten Versand.",
   o_loading:"Angebot wird geladen…", o_title:"Ihr Angebot", o_lead:"Limousine Service Dolomiti steht für Ihren Transfer zur Verfügung. Akzeptieren Sie, um den Service zu bestätigen.",
   s_ritiro:"Abholzeit", s_tragitto:"Strecke", s_volo:"Flug", s_persone:"Personen", w_valigie:"Koffer", w_sci:"Ski", s_mezzo:"Fahrzeug", s_prezzo:"Preis des Service", s_note:"Anmerkungen", s_cond:"Allgemeine Bedingungen",
-  o_accept:"Zahlungspflichtig bestätigen · ", o_terms:"Ich habe die allgemeinen Bedingungen gelesen und akzeptiere sie, einschließlich der Gebühren bei Nichterscheinen.", o_termswait:"Bitte akzeptieren Sie die Bedingungen", o_confirming:"Wird bestätigt…", o_pay:"Jetzt bezahlen · ", o_hint:"Mit der Annahme gilt der Service als bestätigt und Limousine Service Dolomiti wird benachrichtigt.",
+  o_reject:"Buchung nicht bestätigen", o_reject_q:"Möchten Sie mitteilen, dass der Preis nicht passt? Die Buchung wird nicht bestätigt und Alpstay meldet sich bei Ihnen.", o_reject_t:"Antwort erfasst", o_reject_p:"Wir haben erfasst, dass der Preis nicht akzeptiert wurde. Die Buchung ist nicht bestätigt: Alpstay meldet sich in Kürze bei Ihnen.", o_accept:"Zahlungspflichtig bestätigen · ", o_terms:"Ich habe die allgemeinen Bedingungen gelesen und akzeptiere sie: Stornierung, Wartezeiten und Gebühren bei Nichterscheinen.", o_termswait:"Bitte akzeptieren Sie die Bedingungen", o_confirming:"Wird bestätigt…", o_pay:"Jetzt bezahlen · ", o_hint:"Mit der Annahme gilt der Service als bestätigt und Limousine Service Dolomiti wird benachrichtigt.",
   o_notfound_t:"Angebot nicht gefunden", o_notfound_p:"Bitte prüfen Sie den per E-Mail erhaltenen Link oder kontaktieren Sie die Unterkunft.", o_err:"Vorgang fehlgeschlagen, bitte erneut versuchen.",
   c_title:"Service bestätigt", c_text:"Danke {nome}, Ihre Annahme ist registriert. Limousine Service Dolomiti erwartet Sie wie angegeben.",
   c_ritiro:"Abholung", c_prezzo:"Preis", c_pay:"Zahlung abschließen · ", c_code:"Code {id} · für Unterstützung +39 335 6345264"
@@ -362,14 +366,14 @@ const I18N={
   opt_rif_par:"DEPARTURE time — from the pick-up location", opt_rif_arr:"ARRIVAL time — at the destination",
   hint_rif:"Indicate whether the time is when you leave the pick-up location or when you need to arrive at the destination.",
   err_req:"Required field", err_email:"Invalid email", err_sel:"Select an option", err_struct:"Select a property", err_num:"Enter a value",
-  btn_submit:"Send request", submit_hint:"Your request will be sent to info@limousinedolomiti.com · cc to info@alpstay.eu",
+  cond_check:"I accept the cancellation terms: free up to 6 days before the service; from the 5th day onwards 50% of the total amount is due.", cond_wait:"Accept the cancellation terms to send the request", btn_submit:"Send request", submit_hint:"Your request will be sent to info@limousinedolomiti.com · cc to info@alpstay.eu",
   foot_label:"Official service provider", foot_note:"Transfer service reserved for guests of Alpstay properties · alpstay.eu",
   js_sending:"Sending…", js_succ_code:"Request code · ",
   js_succ_real:"Your request has been sent to Limousine Service Dolomiti, with a copy to Alpstay. It will be confirmed shortly.",
   js_succ_demo:"Request saved in demo mode. Configure Firebase for real sending.",
   o_loading:"Loading offer…", o_title:"Your offer", o_lead:"Limousine Service Dolomiti is available for your transfer. Accept to confirm the service.",
   s_ritiro:"Pick-up time", s_tragitto:"Route", s_volo:"Flight", s_persone:"People", w_valigie:"suitcases", w_sci:"ski", s_mezzo:"Vehicle", s_prezzo:"Service price", s_note:"Notes", s_cond:"General conditions",
-  o_accept:"Confirm with obligation to pay · ", o_terms:"I have read and accept the general conditions, including the no-show charge.", o_termswait:"Accept the conditions to continue", o_confirming:"Confirming…", o_pay:"Pay now · ", o_hint:"By accepting, the service will be confirmed and Limousine Service Dolomiti will be notified.",
+  o_reject:"I do not confirm the booking", o_reject_q:"Do you want to let us know the price is not acceptable? The booking will not be confirmed and Alpstay will contact you.", o_reject_t:"Reply recorded", o_reject_p:"We have recorded that the price was not accepted. The booking is not confirmed: Alpstay will contact you shortly.", o_accept:"Confirm with obligation to pay · ", o_terms:"I have read and accept the general conditions: cancellation, waiting times and no-show charge.", o_termswait:"Accept the conditions to continue", o_confirming:"Confirming…", o_pay:"Pay now · ", o_hint:"By accepting, the service will be confirmed and Limousine Service Dolomiti will be notified.",
   o_notfound_t:"Offer not found", o_notfound_p:"Please check the link you received by email or contact the property.", o_err:"Operation failed, please try again.",
   c_title:"Service confirmed", c_text:"Thank you {nome}, your acceptance is recorded. Limousine Service Dolomiti will be waiting for you as detailed.",
   c_ritiro:"Pick-up", c_prezzo:"Price", c_pay:"Complete payment · ", c_code:"Code {id} · for assistance +39 335 6345264"
@@ -390,14 +394,14 @@ const I18N={
   opt_rif_par:"出发时间 — 从上车地点", opt_rif_arr:"到达时间 — 在目的地",
   hint_rif:"请说明该时间是从上车地点出发的时间，还是需要到达目的地的时间。",
   err_req:"必填项", err_email:"邮箱无效", err_sel:"请选择一项", err_struct:"请选择住宿", err_num:"请输入数值",
-  btn_submit:"提交申请", submit_hint:"申请将发送至 info@limousinedolomiti.com · 抄送 info@alpstay.eu",
+  cond_check:"我接受取消条款：服务前 6 天及以上免费取消；自第 5 天起需支付总金额的 50%。", cond_wait:"请接受取消条款后提交申请", btn_submit:"提交申请", submit_hint:"申请将发送至 info@limousinedolomiti.com · 抄送 info@alpstay.eu",
   foot_label:"官方服务提供商", foot_note:"本接送服务仅限 Alpstay 住宿的客人 · alpstay.eu",
   js_sending:"提交中…", js_succ_code:"申请编号 · ",
   js_succ_real:"您的申请已发送至 Limousine Service Dolomiti，并抄送 Alpstay，稍后将予以确认。",
   js_succ_demo:"已在演示模式下保存申请。请配置 Firebase 以实际发送。",
   o_loading:"正在加载报价…", o_title:"您的报价", o_lead:"Limousine Service Dolomiti 可为您提供接送服务。点击接受以确认服务。",
   s_ritiro:"接载时间", s_tragitto:"行程", s_volo:"航班", s_persone:"人数", w_valigie:"件行李", w_sci:"滑雪包", s_mezzo:"车辆", s_prezzo:"服务价格", s_note:"备注", s_cond:"一般条款",
-  o_accept:"确认并承担付款义务 · ", o_terms:"我已阅读并接受通用条款，包括未到场的费用规定。", o_termswait:"请接受条款以继续", o_confirming:"确认中…", o_pay:"立即支付 · ", o_hint:"接受后，服务即视为确认，并会通知 Limousine Service Dolomiti。",
+  o_reject:"我不确认此预订", o_reject_q:"是否告知我们价格不合适？预订将不会确认，Alpstay 将与您联系。", o_reject_t:"回复已记录", o_reject_p:"我们已记录您未接受该价格。预订尚未确认：Alpstay 将尽快与您联系。", o_accept:"确认并承担付款义务 · ", o_terms:"我已阅读并接受通用条款：取消、等待时间及未到场费用。", o_termswait:"请接受条款以继续", o_confirming:"确认中…", o_pay:"立即支付 · ", o_hint:"接受后，服务即视为确认，并会通知 Limousine Service Dolomiti。",
   o_notfound_t:"未找到报价", o_notfound_p:"请检查您通过邮件收到的链接，或联系住宿方。", o_err:"操作失败，请重试。",
   c_title:"服务已确认", c_text:"谢谢您，{nome}，您的接受已记录。Limousine Service Dolomiti 将按所示详情等候您。",
   c_ritiro:"接载", c_prezzo:"价格", c_pay:"完成支付 · ", c_code:"编号 {id} · 如需协助 +39 335 6345264"
@@ -418,14 +422,14 @@ const I18N={
   opt_rif_par:"출발 시간 — 출발 장소에서", opt_rif_arr:"도착 시간 — 목적지에서",
   hint_rif:"입력한 시간이 픽업 장소에서 떠나는 시간인지, 목적지에 도착해야 하는 시간인지 표시해 주세요.",
   err_req:"필수 입력", err_email:"잘못된 이메일", err_sel:"항목을 선택하세요", err_struct:"숙소를 선택하세요", err_num:"값을 입력하세요",
-  btn_submit:"요청 보내기", submit_hint:"요청은 info@limousinedolomiti.com 으로 전송되며 info@alpstay.eu 에 참조됩니다",
+  cond_check:"취소 조건에 동의합니다: 서비스 6일 전까지 무료, 5일 전부터는 총액의 50%가 부과됩니다.", cond_wait:"요청을 보내려면 취소 조건에 동의해 주세요", btn_submit:"요청 보내기", submit_hint:"요청은 info@limousinedolomiti.com 으로 전송되며 info@alpstay.eu 에 참조됩니다",
   foot_label:"공식 서비스 제공업체", foot_note:"Alpstay 숙소 고객 전용 트랜스퍼 서비스 · alpstay.eu",
   js_sending:"전송 중…", js_succ_code:"요청 코드 · ",
   js_succ_real:"요청이 Limousine Service Dolomiti로 전송되었으며 Alpstay에 사본이 전달되었습니다. 곧 확정됩니다.",
   js_succ_demo:"데모 모드로 요청이 저장되었습니다. 실제 전송하려면 Firebase를 설정하세요.",
   o_loading:"제안을 불러오는 중…", o_title:"제안 내용", o_lead:"Limousine Service Dolomiti가 트랜스퍼를 제공할 수 있습니다. 수락하면 서비스가 확정됩니다.",
   s_ritiro:"픽업 시간", s_tragitto:"경로", s_volo:"항공편", s_persone:"인원", w_valigie:"수하물", w_sci:"스키", s_mezzo:"차량", s_prezzo:"서비스 요금", s_note:"메모", s_cond:"일반 약관",
-  o_accept:"결제 의무를 확인합니다 · ", o_terms:"일반 약관(미탑승 시 요금 포함)을 읽고 동의합니다.", o_termswait:"계속하려면 약관에 동의해 주세요", o_confirming:"확인 중…", o_pay:"지금 결제 · ", o_hint:"수락하면 서비스가 확정되고 Limousine Service Dolomiti에 통보됩니다.",
+  o_reject:"예약을 확정하지 않습니다", o_reject_q:"요금이 맞지 않다고 알려드릴까요? 예약은 확정되지 않으며 Alpstay가 연락드립니다.", o_reject_t:"답변이 기록되었습니다", o_reject_p:"요금을 수락하지 않으셨음을 기록했습니다. 예약은 확정되지 않았으며 Alpstay가 곷 연락드립니다.", o_accept:"결제 의무를 확인합니다 · ", o_terms:"일반 약관(취소, 대기 시간, 미탑승 요금)을 읽고 동의합니다.", o_termswait:"계속하려면 약관에 동의해 주세요", o_confirming:"확인 중…", o_pay:"지금 결제 · ", o_hint:"수락하면 서비스가 확정되고 Limousine Service Dolomiti에 통보됩니다.",
   o_notfound_t:"제안을 찾을 수 없습니다", o_notfound_p:"이메일로 받은 링크를 확인하거나 숙소에 문의하세요.", o_err:"처리에 실패했습니다. 다시 시도하세요.",
   c_title:"서비스 확정됨", c_text:"{nome}님, 수락이 기록되었습니다. Limousine Service Dolomiti가 안내된 내용대로 기다립니다.",
   c_ritiro:"픽업", c_prezzo:"요금", c_pay:"결제 완료 · ", c_code:"코드 {id} · 문의 +39 335 6345264"
@@ -458,6 +462,12 @@ const Store = {
     const arr=await this._localGet(); let cond='';
     if(window.storage){ try{ const c=await window.storage.get('alpstay_conditions',true); cond=c?c.value:''; }catch(e){} }
     return {booking:arr.find(x=>x.id===id)||null, conditions:cond};
+  },
+  async reject(id){
+    const patch={ stato:'rifiutocliente', rispostaClienteAt:new Date().toISOString(),
+                  acceptedAt:'', prezzoAccettato:0, confermaVista:'' };
+    if(FB_ON){ await db.ref('bookings/'+id).update(patch); return; }
+    const arr=await this._localGet(); const i=arr.findIndex(x=>x.id===id); if(i>=0){ Object.assign(arr[i],patch); await this._localSet(arr); }
   },
   async accept(id,prezzoAccettato,condizioniTesto){
     const patch={ stato:'confermata', acceptedAt:new Date().toISOString(),
@@ -506,6 +516,14 @@ function sendRequestEmail(b){
   const to=[CONFIG.TO_EMAIL, CONFIG.CC_EMAIL].filter(Boolean).join(',');
   sendMail(to, '', b.email||CONFIG.CC_EMAIL, 'Richiesta transfer · '+b.nome+' '+b.cognome+' · '+fmtDate(b.data), html);
 }
+function sendRejectedEmail(b){
+  const rows=[['Codice',b.id],['Passeggero',esc(b.nome)+' '+esc(b.cognome)],
+    ['Data',fmtDate(b.data)],['Tragitto',esc(b.partenza)+' → '+esc(b.arrivo)],
+    ['Prezzo proposto',eur(b.prezzo)]];
+  const html=mailShell('Prezzo non accettato','Il cliente ha comunicato che il prezzo proposto non è accettato. La prenotazione non è confermata.', rows, '');
+  const to=[CONFIG.TO_EMAIL, CONFIG.CC_EMAIL].filter(Boolean).join(',');
+  return sendMail(to, '', b.email||CONFIG.CC_EMAIL, 'Prezzo non accettato · '+b.nome+' '+b.cognome, html);
+}
 function sendConfirmedEmail(b){
   const rows=[['Codice',b.id],['Orario di ritiro',(esc(b.orarioConfermato)||'—')+' · '+fmtDate(b.data),true],['Tragitto',esc(b.partenza)+' → '+esc(b.arrivo)],['Mezzo',esc(b.veicolo)||'—'],['Prezzo accettato',eur(b.prezzoAccettato||b.prezzo),true]];
   if(b.noteOspite) rows.push(['Note',esc(b.noteOspite)]);
@@ -530,11 +548,17 @@ function collect(){
     tipo:g('tipo'), struttura:g('struttura'), nome:g('nome'), cognome:g('cognome'), email:g('email'), telefono:g('telefono'),
     data:g('data'), ora:g('ora'), riferimento:g('riferimento'), partenza:g('partenza'), arrivo:g('arrivo'), volo:g('volo'),
     persone:g('persone'), bagaglio:g('bagaglio')||'0', sacche:g('sacche')||'0', note:g('note'),
-    prezzo:0, noteInterne:'', orarioConfermato:'', veicolo:'', noteFornitore:'', rispostaAt:'', pagamentoAnticipato:'', linkPagamento:'', acceptedAt:'', condizioniAttive:'', noteOspite:'' };
+    condizioniCancellazione:'accettate', prezzo:0, noteInterne:'', orarioConfermato:'', veicolo:'', noteFornitore:'', rispostaAt:'', pagamentoAnticipato:'', linkPagamento:'', acceptedAt:'', condizioniAttive:'', noteOspite:'' };
 }
 form.addEventListener('submit',async e=>{
   e.preventDefault();
   if(!validate()){ const f=form.querySelector('.invalid'); if(f) f.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  if(!$('#condOk').checked){                       // le condizioni di cancellazione vanno accettate prima
+    $('#condBox').style.borderColor='var(--err)';
+    $('#condBox').scrollIntoView({behavior:'smooth',block:'center'});
+    alert(t('cond_wait'));
+    return;
+  }
   const b=collect();
   submitBtn.disabled=true; submitBtn.textContent=t('js_sending');
   try{ await Store.create(b); }
@@ -585,13 +609,26 @@ async function renderOffer(id){
         <span style="font-size:14px;color:var(--ink);line-height:1.5">${t('o_terms')}</span>
       </label><div></div>`:''}
       <button class="submit" id="acceptBtn"${cond?' disabled':''}>${t('o_accept')}${eur(booking.prezzo)}</button>
-      ${cond?`<p class="hint" id="termsHint" style="color:var(--gold)">${t('o_termswait')}</p>`:''}
+      ${cond?`<p class="hint" id="termsHint" style="color:var(--gold);margin-top:10px">${t('o_termswait')}</p>`:''}
+      <div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--field-border);max-width:420px;margin-left:auto;margin-right:auto">
+        <button class="ghost-btn" id="rejectBtn" style="margin-top:0;border-color:var(--err);color:var(--err)">${t('o_reject')}</button>
+      </div>
       ${paga&&booking.linkPagamento?`<div style="margin-top:14px"><a class="ghost-btn" style="display:inline-block;text-decoration:none" href="${esc(booking.linkPagamento)}" target="_blank" rel="noopener">${t('o_pay')}${eur(booking.prezzo)}</a></div>`:''}
       <p class="hint">${t('o_hint')}</p>
     </div>`;
   if($('#termsOk')) $('#termsOk').addEventListener('change',e=>{
     $('#acceptBtn').disabled=!e.target.checked;
     if($('#termsHint')) $('#termsHint').style.visibility=e.target.checked?'hidden':'visible';
+  });
+  $('#rejectBtn').addEventListener('click',async()=>{
+    if(!confirm(t('o_reject_q'))) return;
+    const btn=$('#rejectBtn'); btn.disabled=true; btn.textContent=t('o_confirming');
+    try{ await Store.reject(id); }
+    catch(e){ btn.disabled=false; btn.textContent=t('o_reject'); alert(t('o_err')); return; }
+    booking.stato='rifiutocliente';
+    sendRejectedEmail(booking);
+    $('#offerBox').innerHTML=`<h1 style="font-size:34px">${t('o_reject_t')}</h1><p class="lead">${t('o_reject_p')}</p>`;
+    window.scrollTo({top:0,behavior:'smooth'});
   });
   $('#acceptBtn').addEventListener('click',async()=>{
     if($('#termsOk') && !$('#termsOk').checked) return;
