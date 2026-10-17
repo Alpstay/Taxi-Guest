@@ -57,7 +57,6 @@
   <div id="avviso" class="avviso" style="display:none"><p id="avvisoTxt"></p></div>
   <div id="contenuto"></div>
   <footer>
-    <div id="piede"></div>
     <a class="back" href="index.html" id="back">Torna alla prenotazione</a>
   </footer>
 </div>
@@ -65,9 +64,12 @@
 <script>
 /* ===== Dati del titolare: GLI STESSI che inserisci in index.html ===== */
 const LEGALE = {
-  vettore: { nome:'Limousine Service Dolomiti', ragioneSociale:'', sede:'', piva:'', rea:'',
-             email:'info@limousinedolomiti.com', tel:'+39 335 6345264' },
-  gestore: { nome:'Alpstay', ragioneSociale:'', sede:'', piva:'', rea:'', email:'info@alpstay.eu', tel:'' },
+  vettore: { nome:'Limousine Service Dolomiti', ragioneSociale:'Limousine Service Dolomiti di Ploner Florian',
+         sede:'Strada Meisules 242/B, 39048 Selva di Val Gardena (BZ)', piva:'IT02748290216', rea:'',
+         email:'info@limousinedolomiti.com', tel:'+39 335 6345264', web:'www.taxi-val-gardena.it' },
+  gestore: { nome:'Alpstay', ragioneSociale:'Saslong Srl',
+         sede:'Via Pallua 40, 39047 Santa Cristina Valgardena (BZ)', piva:'02675760215', rea:'',
+         email:'info@alpstay.eu', tel:'+39 0471 774480', web:'www.alpstay.eu' },
   aggiornamento: '17/10/2026'
 };
 </script>
@@ -84,7 +86,7 @@ function titolari(T){
       + (d.ragioneSociale ? esc(d.ragioneSociale) : manca(d.ragioneSociale) + ' (' + esc(d.nome) + ')')
       + '<br>' + manca(d.sede)
       + '<br>P.IVA ' + manca(d.piva) + (d.rea ? ' · REA ' + esc(d.rea) : '')
-      + '<br>' + esc(d.email) + (d.tel ? ' · ' + esc(d.tel) : '') + '</p>';
+      + '<br>' + esc(d.email) + (d.tel ? ' · ' + esc(d.tel) : '') + (d.web ? ' · ' + esc(d.web) : '') + '</p>';
   };
   return riga(T.etVettore, LEGALE.vettore) + riga(T.etGestore, LEGALE.gestore);
 }
@@ -105,7 +107,6 @@ function render(l){
   document.getElementById('contenuto').innerHTML = html;
   const box = document.querySelector('#contenuto .box');
   if (box) box.innerHTML = titolari(T);
-  document.getElementById('piede').innerHTML = titolari(T).replace(/<p>/g,'<div style="margin-bottom:10px">').replace(/<\/p>/g,'</div>');
   document.getElementById('back').textContent = T.back;
   const av = document.getElementById('avviso');
   if (completo()) { av.style.display = 'none'; }
