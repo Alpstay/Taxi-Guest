@@ -227,6 +227,27 @@
         </div>
 
         <div class="section">
+          <label for="ritOk" id="ritBox" style="display:flex;align-items:center;gap:11px;padding:15px 18px;border:1px solid var(--gold);border-radius:3px;background:var(--gold-wash);cursor:pointer">
+            <input type="checkbox" id="ritOk">
+            <span style="font-size:15px;color:var(--ink)" data-i18n="rit_check">Prenoto anche il transfer di ritorno</span>
+          </label>
+        </div>
+
+        <div class="section" id="ritSec" style="display:none">
+          <div class="section-head"><span class="section-title" data-i18n="sec_ritorno">Viaggio di ritorno</span><span class="section-bar"></span></div>
+          <p class="hint" style="text-align:left;margin:-10px 0 18px" data-i18n="rit_hint">Il ritorno viene gestito come servizio a sé: riceverai un prezzo e una conferma separati.</p>
+          <div class="grid">
+            <div class="field"><label for="dataR"><span data-i18n="f_data">Data</span><span class="req">*</span></label><input type="date" id="dataR" required><span class="err-msg" data-i18n="err_req">Campo obbligatorio</span></div>
+            <div class="field"><label for="oraR"><span data-i18n="f_ora">Ora</span><span class="req">*</span></label><input type="time" id="oraR" required><span class="err-msg" data-i18n="err_req">Campo obbligatorio</span></div>
+            <div class="field full"><label for="riferimentoR"><span data-i18n="f_rif">A cosa si riferisce l&rsquo;orario</span><span class="req">*</span></label>
+              <select id="riferimentoR" required><option value="" data-i18n="opt_sel">Seleziona&hellip;</option><option value="partenza" data-i18n="opt_rif_par">Orario di PARTENZA &mdash; dal luogo di partenza</option><option value="arrivo" data-i18n="opt_rif_arr">Orario di ARRIVO &mdash; a destinazione</option></select><span class="err-msg" data-i18n="err_req">Campo obbligatorio</span></div>
+            <div class="field"><label for="partenzaR"><span data-i18n="f_partenza">Luogo di partenza</span><span class="req">*</span></label><input type="text" id="partenzaR" required><span class="err-msg" data-i18n="err_req">Campo obbligatorio</span></div>
+            <div class="field"><label for="arrivoR"><span data-i18n="f_arrivo">Luogo di arrivo</span><span class="req">*</span></label><input type="text" id="arrivoR" required><span class="err-msg" data-i18n="err_req">Campo obbligatorio</span></div>
+            <div class="field"><label for="voloR" data-i18n="f_volo">Numero del volo</label><input type="text" id="voloR" data-i18n-ph="ph_volo" placeholder="se applicabile"></div>
+          </div>
+        </div>
+
+        <div class="section">
           <div class="section-head"><span class="section-title" data-i18n="sec_lugg">Bagagli</span><span class="section-bar"></span></div>
           <div class="grid">
             <div class="field"><label for="bagaglio" data-i18n="f_bagaglio">Bagagli / valigie</label><input type="number" id="bagaglio" min="0" step="1" value="0"></div>
@@ -310,7 +331,7 @@ const I18N={
   opt_rif_par:"Orario di PARTENZA — dal luogo di partenza", opt_rif_arr:"Orario di ARRIVO — a destinazione",
   hint_rif:"Indica se l'orario è quello in cui si parte dal luogo di ritiro oppure quello in cui si deve arrivare a destinazione.",
   err_req:"Campo obbligatorio", err_email:"Email non valida", err_sel:"Seleziona un'opzione", err_struct:"Seleziona una struttura", err_num:"Inserisci un valore",
-  cond_check:"Accetto le condizioni: modifiche e cancellazione gratuite fino a 6 giorni prima del servizio; dal 5º giorno in poi è dovuto il 50% dell\'importo totale.", cond_wait:"Accetta le condizioni di cancellazione per inviare la richiesta", btn_submit:"Invia richiesta", submit_hint:"La richiesta sarà inviata a info@limousinedolomiti.com · in copia a info@alpstay.eu",
+  cond_check:"Accetto le condizioni: modifiche e cancellazione gratuite fino a 6 giorni prima del servizio; dal 5º giorno in poi è dovuto il 50% dell\'importo totale.", cond_wait:"Accetta le condizioni di cancellazione per inviare la richiesta", rit_check:"Prenoto anche il transfer di ritorno", sec_ritorno:"Viaggio di ritorno", rit_hint:"Il ritorno viene gestito come servizio a sé: riceverai un prezzo e una conferma separati.", btn_submit:"Invia richiesta", submit_hint:"La richiesta sarà inviata a info@limousinedolomiti.com · in copia a info@alpstay.eu",
   foot_label:"Fornitore ufficiale del servizio", foot_note:"Servizio transfer riservato agli ospiti delle strutture Alpstay · alpstay.eu",
   js_sending:"Invio in corso…", js_succ_code:"Codice richiesta · ",
   js_succ_real:"La richiesta è stata inviata a Limousine Service Dolomiti, con copia ad Alpstay. Verrà confermata a breve.",
@@ -338,7 +359,7 @@ const I18N={
   opt_rif_par:"ABFAHRTSzeit — vom Abholort", opt_rif_arr:"ANKUNFTSzeit — am Zielort",
   hint_rif:"Geben Sie an, ob die Uhrzeit die Abfahrt vom Abholort oder die gewünschte Ankunft am Zielort ist.",
   err_req:"Pflichtfeld", err_email:"Ungültige E-Mail", err_sel:"Bitte auswählen", err_struct:"Unterkunft auswählen", err_num:"Wert eingeben",
-  cond_check:"Ich akzeptiere die Bedingungen: Änderungen und Stornierung kostenlos bis 6 Tage vor dem Service; ab dem 5. Tag sind 50% des Gesamtbetrags fällig.", cond_wait:"Bitte akzeptieren Sie die Stornobedingungen", btn_submit:"Anfrage senden", submit_hint:"Die Anfrage wird an info@limousinedolomiti.com gesendet · in Kopie an info@alpstay.eu",
+  cond_check:"Ich akzeptiere die Bedingungen: Änderungen und Stornierung kostenlos bis 6 Tage vor dem Service; ab dem 5. Tag sind 50% des Gesamtbetrags fällig.", cond_wait:"Bitte akzeptieren Sie die Stornobedingungen", rit_check:"Auch den Rücktransfer buchen", sec_ritorno:"Rückfahrt", rit_hint:"Die Rückfahrt gilt als eigener Service: Sie erhalten dafür einen eigenen Preis und eine eigene Bestätigung.", btn_submit:"Anfrage senden", submit_hint:"Die Anfrage wird an info@limousinedolomiti.com gesendet · in Kopie an info@alpstay.eu",
   foot_label:"Offizieller Anbieter des Services", foot_note:"Transferservice für Gäste der Alpstay-Unterkünfte · alpstay.eu",
   js_sending:"Wird gesendet…", js_succ_code:"Anfragecode · ",
   js_succ_real:"Ihre Anfrage wurde an Limousine Service Dolomiti gesendet, in Kopie an Alpstay. Sie wird in Kürze bestätigt.",
@@ -366,7 +387,7 @@ const I18N={
   opt_rif_par:"DEPARTURE time — from the pick-up location", opt_rif_arr:"ARRIVAL time — at the destination",
   hint_rif:"Indicate whether the time is when you leave the pick-up location or when you need to arrive at the destination.",
   err_req:"Required field", err_email:"Invalid email", err_sel:"Select an option", err_struct:"Select a property", err_num:"Enter a value",
-  cond_check:"I accept the terms: changes and cancellation are free up to 6 days before the service; from the 5th day onwards 50% of the total amount is due.", cond_wait:"Accept the cancellation terms to send the request", btn_submit:"Send request", submit_hint:"Your request will be sent to info@limousinedolomiti.com · cc to info@alpstay.eu",
+  cond_check:"I accept the terms: changes and cancellation are free up to 6 days before the service; from the 5th day onwards 50% of the total amount is due.", cond_wait:"Accept the cancellation terms to send the request", rit_check:"Also book the return transfer", sec_ritorno:"Return journey", rit_hint:"The return is handled as a separate service: you will receive its own price and confirmation.", btn_submit:"Send request", submit_hint:"Your request will be sent to info@limousinedolomiti.com · cc to info@alpstay.eu",
   foot_label:"Official service provider", foot_note:"Transfer service reserved for guests of Alpstay properties · alpstay.eu",
   js_sending:"Sending…", js_succ_code:"Request code · ",
   js_succ_real:"Your request has been sent to Limousine Service Dolomiti, with a copy to Alpstay. It will be confirmed shortly.",
@@ -394,7 +415,7 @@ const I18N={
   opt_rif_par:"出发时间 — 从上车地点", opt_rif_arr:"到达时间 — 在目的地",
   hint_rif:"请说明该时间是从上车地点出发的时间，还是需要到达目的地的时间。",
   err_req:"必填项", err_email:"邮箱无效", err_sel:"请选择一项", err_struct:"请选择住宿", err_num:"请输入数值",
-  cond_check:"我接受条款：服务前 6 天及以上可免费修改或取消；自第 5 天起需支付总金额的 50%。", cond_wait:"请接受取消条款后提交申请", btn_submit:"提交申请", submit_hint:"申请将发送至 info@limousinedolomiti.com · 抄送 info@alpstay.eu",
+  cond_check:"我接受条款：服务前 6 天及以上可免费修改或取消；自第 5 天起需支付总金额的 50%。", cond_wait:"请接受取消条款后提交申请", rit_check:"同时预订返程接送", sec_ritorno:"返程", rit_hint:"返程作为单独服务处理：您将收到单独的报价与确认。", btn_submit:"提交申请", submit_hint:"申请将发送至 info@limousinedolomiti.com · 抄送 info@alpstay.eu",
   foot_label:"官方服务提供商", foot_note:"本接送服务仅限 Alpstay 住宿的客人 · alpstay.eu",
   js_sending:"提交中…", js_succ_code:"申请编号 · ",
   js_succ_real:"您的申请已发送至 Limousine Service Dolomiti，并抄送 Alpstay，稍后将予以确认。",
@@ -422,7 +443,7 @@ const I18N={
   opt_rif_par:"출발 시간 — 출발 장소에서", opt_rif_arr:"도착 시간 — 목적지에서",
   hint_rif:"입력한 시간이 픽업 장소에서 떠나는 시간인지, 목적지에 도착해야 하는 시간인지 표시해 주세요.",
   err_req:"필수 입력", err_email:"잘못된 이메일", err_sel:"항목을 선택하세요", err_struct:"숙소를 선택하세요", err_num:"값을 입력하세요",
-  cond_check:"조건에 동의합니다: 서비스 6일 전까지 변경 및 취소 무료, 5일 전부터는 총액의 50%가 부과됩니다.", cond_wait:"요청을 보내려면 취소 조건에 동의해 주세요", btn_submit:"요청 보내기", submit_hint:"요청은 info@limousinedolomiti.com 으로 전송되며 info@alpstay.eu 에 참조됩니다",
+  cond_check:"조건에 동의합니다: 서비스 6일 전까지 변경 및 취소 무료, 5일 전부터는 총액의 50%가 부과됩니다.", cond_wait:"요청을 보내려면 취소 조건에 동의해 주세요", rit_check:"귀가 트랜스퍼도 예약", sec_ritorno:"귀가 여정", rit_hint:"귀가 편은 별도 서비스로 처리되며 요금과 확정도 따로 안내됩니다.", btn_submit:"요청 보내기", submit_hint:"요청은 info@limousinedolomiti.com 으로 전송되며 info@alpstay.eu 에 참조됩니다",
   foot_label:"공식 서비스 제공업체", foot_note:"Alpstay 숙소 고객 전용 트랜스퍼 서비스 · alpstay.eu",
   js_sending:"전송 중…", js_succ_code:"요청 코드 · ",
   js_succ_real:"요청이 Limousine Service Dolomiti로 전송되었으며 Alpstay에 사본이 전달되었습니다. 곧 확정됩니다.",
@@ -506,15 +527,24 @@ function mailShell(title, intro, rows, extra){
     ${extra||''}
     <div style="margin-top:16px;font-size:12px;color:#A79E8C">Alpstay · alpstay.eu</div></div></div>`;
 }
-function sendRequestEmail(b){
+function sendRequestEmail(tratte){
+  const b=tratte[0];
   const oraLabel=b.riferimento==='arrivo'?'Arrivo a destinazione':'Partenza dal luogo di partenza';
   const link=CONFIG.ADMIN_URL?CONFIG.ADMIN_URL+(CONFIG.ADMIN_URL.indexOf('?')>=0?'&':'?')+'id='+encodeURIComponent(b.id):'';
   const rows=[['Codice',b.id],['Tipo',esc(b.tipo)],['Struttura',esc(b.struttura)||'—'],['Passeggero',esc(b.nome)+' '+esc(b.cognome)+' · '+esc(b.persone)+' pax'],['Contatti',(esc(b.email)||'')+(b.telefono?' · '+esc(b.telefono):'')],['Data',fmtDate(b.data)],[oraLabel,esc(b.ora),true],['Tragitto',esc(b.partenza)+' → '+esc(b.arrivo)],['Volo',esc(b.volo)||'—'],['Bagagli',esc(b.bagaglio)+' valigie · '+esc(b.sacche)+' sci']];
   if(b.note) rows.push(['Note ospite',esc(b.note)]);
+  if(tratte.length>1){                         // andata e ritorno nello stesso messaggio
+    const r=tratte[1];
+    rows.push(['— RITORNO —','']);
+    rows.push(['Codice ritorno',r.id]);
+    rows.push(['Data ritorno',fmtDate(r.data)+' · '+esc(r.ora)+(r.riferimento==='arrivo'?' (arrivo)':' (partenza)')]);
+    rows.push(['Tragitto ritorno',esc(r.partenza)+' → '+esc(r.arrivo)]);
+    if(r.volo) rows.push(['Volo ritorno',esc(r.volo)]);
+  }
   const extra=link?`<div style="margin:14px 0;padding:14px;background:#FAF6EC;border:1px solid #E6DEC8;border-radius:6px;text-align:center"><div style="font-size:13px;color:#6B6660;margin-bottom:10px">Riservato a Limousine Service Dolomiti</div><a href="${link}" style="display:inline-block;background:#A68A63;color:#fff;text-decoration:none;font-weight:bold;padding:12px 30px;border-radius:6px">Apri il modulo di risposta</a></div>`:'';
   const html=mailShell('Nuova richiesta di transfer','', rows, extra);
   const to=[CONFIG.TO_EMAIL, CONFIG.CC_EMAIL].filter(Boolean).join(',');
-  sendMail(to, '', b.email||CONFIG.CC_EMAIL, 'Richiesta transfer · '+b.nome+' '+b.cognome+' · '+fmtDate(b.data), html);
+  sendMail(to, '', b.email||CONFIG.CC_EMAIL, 'Richiesta transfer'+(tratte.length>1?' A/R':'')+' · '+b.nome+' '+b.cognome+' · '+fmtDate(b.data), html);
 }
 function sendRejectedEmail(b){
   const rows=[['Codice',b.id],['Passeggero',esc(b.nome)+' '+esc(b.cognome)],
@@ -535,20 +565,43 @@ function sendConfirmedEmail(b){
 }
 
 const form=$('#transferForm'), submitBtn=$('#submitBtn'), successBox=$('#success');
-form.querySelectorAll('input,select,textarea').forEach(el=>el.addEventListener('input',()=>el.closest('.field').classList.remove('invalid')));
+
+/* ---- Transfer di ritorno: blocco a scomparsa, precompilato al contrario ---- */
+$('#ritOk').addEventListener('change',e=>{
+  const on=e.target.checked;
+  $('#ritSec').style.display = on ? 'block' : 'none';
+  if(on){
+    if(!$('#partenzaR').value) $('#partenzaR').value=$('#arrivo').value;   // il ritorno parte da dove finisce l'andata
+    if(!$('#arrivoR').value)   $('#arrivoR').value=$('#partenza').value;
+    if(!$('#riferimentoR').value) $('#riferimentoR').value=$('#riferimento').value;
+    if(!$('#dataR').value && $('#data').value) $('#dataR').value=$('#data').value;
+    $('#ritSec').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+});
+form.querySelectorAll('input,select,textarea').forEach(el=>el.addEventListener('input',()=>{ const f=el.closest('.field'); if(f) f.classList.remove('invalid'); }));
 function validate(){
   let ok=true;
-  form.querySelectorAll('[required]').forEach(el=>{ let bad=!el.value.trim(); if(el.type==='number'&&el.value&&Number(el.value)<Number(el.min||0)) bad=true; el.closest('.field').classList.toggle('invalid',bad); if(bad) ok=false; });
+  form.querySelectorAll('[required]').forEach(el=>{ if(el.offsetParent===null){ el.closest('.field').classList.remove('invalid'); return; } let bad=!el.value.trim(); if(el.type==='number'&&el.value&&Number(el.value)<Number(el.min||0)) bad=true; el.closest('.field').classList.toggle('invalid',bad); if(bad) ok=false; });
   const em=$('#email'); if(em.value&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em.value)){ em.closest('.field').classList.add('invalid'); ok=false; }
   return ok;
 }
 function collect(){
   const g=id=>$('#'+id).value.trim();
-  return { id:genId(), createdAt:new Date().toISOString(), stato:'inviata',
-    tipo:g('tipo'), struttura:g('struttura'), nome:g('nome'), cognome:g('cognome'), email:g('email'), telefono:g('telefono'),
-    data:g('data'), ora:g('ora'), riferimento:g('riferimento'), partenza:g('partenza'), arrivo:g('arrivo'), volo:g('volo'),
+  const base={ tipo:g('tipo'), struttura:g('struttura'), nome:g('nome'), cognome:g('cognome'), email:g('email'), telefono:g('telefono'),
     persone:g('persone'), bagaglio:g('bagaglio')||'0', sacche:g('sacche')||'0', note:g('note'),
-    condizioniCancellazione:'accettate', prezzo:0, noteInterne:'', orarioConfermato:'', veicolo:'', noteFornitore:'', rispostaAt:'', pagamentoAnticipato:'', linkPagamento:'', acceptedAt:'', condizioniAttive:'', noteOspite:'' };
+    condizioniCancellazione:'accettate', prezzo:0, noteInterne:'', orarioConfermato:'', veicolo:'', noteFornitore:'',
+    rispostaAt:'', pagamentoAnticipato:'', linkPagamento:'', acceptedAt:'', condizioniAttive:'', noteOspite:'' };
+  const ora=new Date().toISOString();
+  const andata=Object.assign({ id:genId(), createdAt:ora, stato:'inviata',
+    data:g('data'), ora:g('ora'), riferimento:g('riferimento'), partenza:g('partenza'), arrivo:g('arrivo'), volo:g('volo'),
+    tratta:'', collegata:'' }, base);
+  if(!$('#ritOk').checked) return [andata];
+  /* il ritorno è un servizio a sé: prezzo, stato e conferma separati, collegato all'andata */
+  const ritorno=Object.assign({ id:genId(), createdAt:ora, stato:'inviata',
+    data:g('dataR'), ora:g('oraR'), riferimento:g('riferimentoR'), partenza:g('partenzaR'), arrivo:g('arrivoR'), volo:g('voloR'),
+    tratta:'ritorno', collegata:andata.id }, base);
+  andata.tratta='andata'; andata.collegata=ritorno.id;
+  return [andata, ritorno];
 }
 form.addEventListener('submit',async e=>{
   e.preventDefault();
@@ -559,13 +612,14 @@ form.addEventListener('submit',async e=>{
     alert(t('cond_wait'));
     return;
   }
-  const b=collect();
+  const tratte=collect();
   submitBtn.disabled=true; submitBtn.textContent=t('js_sending');
-  try{ await Store.create(b); }
+  try{ for(const t of tratte) await Store.create(t); }
   catch(err){ alert('Invio non riuscito. Riprova o scrivi a '+CONFIG.TO_EMAIL); submitBtn.disabled=false; submitBtn.textContent=t('btn_submit'); return; }
-  sendRequestEmail(b);
-  lastSuccess={id:b.id, real:FB_ON};
-  $('#successCode').textContent=t('js_succ_code')+b.id;
+  sendRequestEmail(tratte);                        // un solo messaggio, anche con andata e ritorno
+  const codici=tratte.map(x=>x.id).join(' · ');
+  lastSuccess={id:codici, real:FB_ON};
+  $('#successCode').textContent=t('js_succ_code')+codici;
   $('#successText').textContent = FB_ON ? t('js_succ_real') : t('js_succ_demo');
   form.style.display='none'; successBox.classList.add('show'); successBox.scrollIntoView({behavior:'smooth',block:'center'});
   submitBtn.disabled=false; submitBtn.textContent=t('btn_submit');
